@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>班级信息管理</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all" />
+    <style type="text/css">
+        .register{
+            height:310px;
+            width:310px;
+            padding: 20px;
+            background-color:rgba(255,255,255,0.5);border-radius: 4px;
+            position:absolute;left: 42%;top: 25%; margin:-120px 0 0 -175px;z-index:99;
+        }
+    </style>
+</head>
+<body>
+<div class="register">
+    <input type="hidden" id="postWay" value="add">
+    <form class="layui-form" action="" method="post" style="text-align: center;" id="testForm">
+        <input type="hidden" name="classid" >
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="text-align: center;">名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="classname" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">开班时间</label>
+            <div class="layui-input-block">
+                <input type="text"  name ="classtime" placeholder="请输入入校时间" lay-verify="required|date" onclick="layui.laydate({elem: this,max: laydate.now()})" class="layui-input userBirthday">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="text-align: center;">专业</label>
+            <div class="layui-input-block">
+                <input type="text" name="classmajor" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="text-align: center;">人数</label>
+            <div class="layui-input-block">
+                <input type="text" name="classnum" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="text-align: center;">老师</label>
+            <div class="layui-input-block">
+                <select name="teacherInfo.teachid" lay-verify="required">
+                    <option value="" >请选择老师</option>
+                </select>
+            </div>
+        </div>
+        <button class="layui-btn login_btn" lay-submit lay-filter="register">提交</button>
+        <button class="layui-btn login_btn" type="reset">重置</button>
+    </form>
+</div>
+<script src="/js/jquery-1.9.1.min.js" ></script>
+<script type="text/javascript" src="/layui/layui.js"></script>
+<script type="text/javascript" src="/js/register/EditClassInfo.js"></script>
+<script type="text/javascript" >
+    function setData(data){
+        $("input[name='classid']").val(data.classid);
+        $("input[name='classname']").val(data.classname);
+        $("input[name='classtime']").val(data.classtime);
+        $("input[name='classmajor']").val(data.classmajor);
+        $("input[name='classnum']").val(data.classnum);
+        $("#postWay").val("edit");
+        layui.use('form', function () {
+            var $ = layui.jquery;//重点在layui中引用JQ必须写这一句
+            var form = layui.form();
+            setTimeout(function () {
+                $("select[name='teacherInfo.teachid']").val(data.teacherInfo.teachid);
+                //$('#role').attr('disabled',"disabled");
+                form.render('select');
+            },500);
+        });
+    }
+</script>
+</body>
+</html>

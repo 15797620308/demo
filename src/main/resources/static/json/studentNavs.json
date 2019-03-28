@@ -1,0 +1,44 @@
+[{
+	"title" : "后台首页",
+	"icon" : "icon-computer",
+	"href" : "/user/test/main",
+	"spread" : false
+},{
+	"title" : "学生课程管理",
+	"icon" : "&#xe631;",
+	"href" : "",
+	"spread" : false,
+	"children" : [
+		{
+			"title" : "课程信息",
+			"icon" : "&#xe61c;",
+			"href" : "/user/show/courseInfo",
+			"spread" : false
+		},
+		{
+			"title" : "选课信息",
+			"icon" : "&#xe609;",
+			"href" : "/user/show/selectCourse",
+			"spread" : false
+		},
+		{
+			"title" : "选课结果",
+			"icon" : "&#xe609;",
+			"href" : "/user/show/selectResult",
+			"spread" : false
+		}
+	]
+},{
+	"title" : "学生成绩管理",
+	"icon" : "&#xe630;",
+	"href" : "",
+	"spread" : false,
+	"children" : [
+		{
+			"title" : "成绩信息",
+			"icon" : "&#xe61c;",
+			"href" : "/user/show/studentScore",
+			"spread" : false
+		}
+	]
+}]

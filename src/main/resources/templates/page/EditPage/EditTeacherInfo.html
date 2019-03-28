@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员信息管理</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all" />
+    <style type="text/css">
+        .register{
+            height:310px;
+            width:310px;
+            padding: 20px;
+            background-color:rgba(255,255,255,0.5);border-radius: 4px;
+            position:absolute;left: 42%;top: 25%; margin:-120px 0 0 -175px;z-index:99;
+        }
+    </style>
+</head>
+<body>
+<div class="register">
+    <input type="hidden" id="postWay" value="add">
+    <form class="layui-form" action="" method="post" style="text-align: center;" id="testForm">
+        <input type="hidden" name="teachid" >
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="text-align: center;">姓名</label>
+            <div class="layui-input-block">
+                <input type="text" name="teachname" lay-verify="username" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="text-align: center;">年龄</label>
+            <div class="layui-input-block">
+                <input type="text" name="teachage" lay-verify="required|number" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">入职年份</label>
+            <div class="layui-input-block">
+                <input type="text"  name ="mantry" placeholder="请输入入职年份" lay-verify="required|date" onclick="layui.laydate({elem: this,max: laydate.now()})" class="layui-input userBirthday">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">职务</label>
+            <div class="layui-input-block">
+                <input type="text"  name ="position" placeholder="请输入职务" lay-verify="required"  class="layui-input userBirthday">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="text-align: center;">电话</label>
+            <div class="layui-input-block">
+                <input type="text" name="phone" lay-verify="required|phone|number" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item" >
+            <label class="layui-form-label" style="text-align: center;">性别</label>
+            <div class="layui-input-block userSex">
+                <input type="radio" name="mansex" value="男" title="男" id="man">
+                <input type="radio" name="mansex" value="女" title="女" id="women">
+            </div>
+        </div>
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">是否在职</label>
+            <div class="layui-input-block work">
+                <input type="radio" name="iswork" value="在职" title="在职" id="iswork">
+                <input type="radio" name="iswork" value="离职" title="离职" id="nowork">
+            </div>
+        </div>
+        <button class="layui-btn login_btn" lay-submit lay-filter="register">提交</button>
+        <button class="layui-btn login_btn" type="reset">重置</button>
+    </form>
+</div>
+<script src="/js/jquery-1.9.1.min.js" ></script>
+<script type="text/javascript" src="/layui/layui.js"></script>
+<script type="text/javascript" src="/js/register/EditTeacherInfo.js"></script>
+<script type="text/javascript" >
+    function setData(data){
+        var manid =  $("input[name='manid']");
+        var manname =  $("input[name='manname']");
+        var manage =  $("input[name='manage']");
+        var mantry =  $("input[name='mantry']");
+        var phone =  $("input[name='phone']");
+        var postWay = $("#postWay");
+        manid.val(data.manid);
+        manname.val(data.manname);
+        manage.val(data.manage);
+        mantry.val(data.mantry);
+        phone.val(data.phone);
+        postWay.val("edit");
+        layui.use('form', function () {
+            var $ = layui.jquery;//重点在layui中引用JQ必须写这一句
+            var form = layui.form();
+            $(".userSex input[value="+data.mansex+"]").attr("checked","checked"); //性别
+            $(".work input[value="+data.iswork+"]").attr("checked","checked"); //性别
+            form.render();
+        });
+    }
+</script>
+</body>
+</html>

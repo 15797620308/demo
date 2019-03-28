@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.mapper.StudentBaseMapper" >
+  <resultMap id="BaseResultMap" type="com.example.model.StudentBase" >
+    <id column="stuId" property="stuid" jdbcType="SMALLINT" />
+    <result column="stuName" property="stuname" jdbcType="VARCHAR" />
+    <result column="stuSex" property="stusex" jdbcType="VARCHAR" />
+    <result column="stuBrith" property="stubrith" jdbcType="DATE" />
+    <result column="stuFamily" property="stufamily" jdbcType="VARCHAR" />
+    <result column="stuAddress" property="stuaddress" jdbcType="VARCHAR" />
+    <result column="stuNation" property="stunation" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    stuId, stuName, stuSex, stuBrith, stuFamily, stuAddress, stuNation
+  </sql>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stu_base
+    <if test="filterData != null and filterData !=''">
+      where stuName LIKE #{filterData} or stuSex LIKE #{filterData}
+    </if>
+  </select>
+
+  <select id="selectCount" resultType="java.lang.Integer" parameterType="java.lang.String">
+    SELECT COUNT(stuId) FROM stu_base
+    <if test="filterData != null and filterData !=''">
+      where stuName LIKE #{filterData} or stuSex LIKE #{filterData}
+    </if>
+  </select>
+
+  <!-- 批量删除 -->
+  <delete id="batchDelete" parameterType="int[]">
+    <!-- delete from emp where empno in(7789,7790) -->
+    <!-- forEach : 用来循环 collection : 用来指定循环的数据的类型 可以填的值有：array,list,map item
+        : 循环中为每个循环的数据指定一个别名 index : 循环中循环的下标 open : 开始 close : 结束 separator : 数组中元素之间的分隔符 -->
+    delete from stu_base where stuId in
+    <foreach collection="arr" item="arr" index="no" open="("
+             separator="," close=")">
+      #{arr}
+    </foreach>
+  </delete>
+
+  <!--- 自动生成 -->
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Short" >
+    select 
+    <include refid="Base_Column_List" />
+    from stu_base
+    where stuId = #{stuid,jdbcType=SMALLINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short" >
+    delete from stu_base
+    where stuId = #{stuid,jdbcType=SMALLINT}
+  </delete>
+  <insert id="insert" parameterType="com.example.model.StudentBase" >
+    insert into stu_base (stuId, stuName, stuSex, 
+      stuBrith, stuFamily, stuAddress, 
+      stuNation)
+    values (#{stuid,jdbcType=SMALLINT}, #{stuname,jdbcType=VARCHAR}, #{stusex,jdbcType=VARCHAR}, 
+      #{stubrith,jdbcType=DATE}, #{stufamily,jdbcType=VARCHAR}, #{stuaddress,jdbcType=VARCHAR}, 
+      #{stunation,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.model.StudentBase" >
+    insert into stu_base
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="stuid != null" >
+        stuId,
+      </if>
+      <if test="stuname != null" >
+        stuName,
+      </if>
+      <if test="stusex != null" >
+        stuSex,
+      </if>
+      <if test="stubrith != null" >
+        stuBrith,
+      </if>
+      <if test="stufamily != null" >
+        stuFamily,
+      </if>
+      <if test="stuaddress != null" >
+        stuAddress,
+      </if>
+      <if test="stunation != null" >
+        stuNation,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="stuid != null" >
+        #{stuid,jdbcType=SMALLINT},
+      </if>
+      <if test="stuname != null" >
+        #{stuname,jdbcType=VARCHAR},
+      </if>
+      <if test="stusex != null" >
+        #{stusex,jdbcType=VARCHAR},
+      </if>
+      <if test="stubrith != null" >
+        #{stubrith,jdbcType=DATE},
+      </if>
+      <if test="stufamily != null" >
+        #{stufamily,jdbcType=VARCHAR},
+      </if>
+      <if test="stuaddress != null" >
+        #{stuaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="stunation != null" >
+        #{stunation,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.model.StudentBase" >
+    update stu_base
+    <set >
+      <if test="stuname != null" >
+        stuName = #{stuname,jdbcType=VARCHAR},
+      </if>
+      <if test="stusex != null" >
+        stuSex = #{stusex,jdbcType=VARCHAR},
+      </if>
+      <if test="stubrith != null" >
+        stuBrith = #{stubrith,jdbcType=DATE},
+      </if>
+      <if test="stufamily != null" >
+        stuFamily = #{stufamily,jdbcType=VARCHAR},
+      </if>
+      <if test="stuaddress != null" >
+        stuAddress = #{stuaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="stunation != null" >
+        stuNation = #{stunation,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where stuId = #{stuid,jdbcType=SMALLINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.model.StudentBase" >
+    update stu_base
+    set stuName = #{stuname,jdbcType=VARCHAR},
+      stuSex = #{stusex,jdbcType=VARCHAR},
+      stuBrith = #{stubrith,jdbcType=DATE},
+      stuFamily = #{stufamily,jdbcType=VARCHAR},
+      stuAddress = #{stuaddress,jdbcType=VARCHAR},
+      stuNation = #{stunation,jdbcType=VARCHAR}
+    where stuId = #{stuid,jdbcType=SMALLINT}
+  </update>
+</mapper>

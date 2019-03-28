@@ -1,0 +1,256 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="/layui01/css/layui.css" media="all" />
+<link rel="stylesheet" href="//at.alicdn.com/t/font_tnyc012u2rlwstt9.css" media="all" />
+<link rel="stylesheet" href="/css/news.css" media="all" />
+<title>角色管理--CRM后台管理系统</title>
+</head>
+<body class="childrenBody">
+	<blockquote class="layui-elem-quote news_search">
+		<div class="layui-inline">
+		    <div class="layui-input-inline">
+		    	<input type="text" value="" placeholder="请输入关键字" class="layui-input search_input">
+		    </div>
+		    <a class="layui-btn search_btn">查询</a>
+		</div>
+		<div class="layui-inline">
+			<a href="user/addUser.jsp" class="layui-btn linksAdd_btn" style="background-color:#5FB878">添加角色</a>
+		</div>
+		<div class="layui-inline">
+			<a class="layui-btn layui-btn-danger batchDel">批量删除</a>
+		</div>
+		<div class="layui-inline">
+			
+		</div>
+	</blockquote>
+	<div class="layui-form links_list">
+	  	<table class="layui-hide" id="test">
+
+		</table>
+	</div>
+	<div id="page" style="text-align:right"></div>
+	<!-- <div id="page"></div> -->
+	<script src="/js/jquery-1.9.1.min.js" ></script>
+	   <script src="/layui01/layui.all.js" charset="utf-8"></script>
+	  <script type="text/html" id="barDemo">
+		         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+		         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+		         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+	</script>
+	<script>
+
+        layui.use(['table','layer','form'],function(){
+            var table=layui.table;
+            var layer = layui.layer;
+            var form = layui.form;
+            var laypage = layui.laypage;
+            var data;  //保存数据
+			var jsondata;
+            var postData={
+                name:"NULL",
+                pageNumber:1,
+                pageSize:1
+
+            };
+
+            //发送ajax  列表查询ajax
+            function send(postData){
+                $.ajax({
+                    type: "POST",//请求的方式
+                    url: "/user/ceshi",//请求的接口
+                    data: postData,//参数（可传可不传递）
+                    dataType: "json",//数据类型
+                    async:false,
+                    success: function (res) {
+                        data=res.content.records;
+                        jsondata = res;
+                        console.log(JSON.stringify(data));
+                        console.log("totalRecords  "+jsondata.content.totalRecords);
+                    },
+                    error:function(XMLHttpRequest, textStatus, errorThrown){
+                        //失败之后执行（我不管，失败别找我i）
+                        alert("数据不存在");
+                        alert(XMLHttpRequest.status);
+                        alert(XMLHttpRequest.readyState);
+                        alert(textStatus);
+
+
+                    }
+                })
+            }
+
+            var infoTable;
+            var
+                // 表单需要的变量
+                infoOptions = {
+                    elem: '#test',
+                    //limits: [10],
+                    cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                    toolbar:true,
+					//page: true,
+                	//limit: 1,//每页默认显示的数量
+					cols: [[
+                        //{field: 'id', title: 'ID',width:20, fixed: 'left'}
+                        {field: 'id', title: 'ID', type:'checkbox', width:'10%', sort: true, fixed: 'left'}
+                        ,{field: 'accountno', title: '编号', width:'10%'}
+                        ,{field: 'name', title: '用户名', width:'15%',edit:'text'}
+                        ,{field: 'idcard', title: '身份证', width:'15%'}
+                        ,{field: 'password', title: '密码', width:'15%',edit:'text'}
+                        ,{field: 'status', title: '状态', width:'15%'}
+                        ,{fixed: 'right',title: '操作', width:'20%', align:'center', toolbar: '#barDemo'}
+                    ]],
+                    data: [],
+                    loading:true
+                };
+            //  页面初始化
+
+            // 查询         ----------------------------------------
+            //监听提交  
+            form.on('submit(searchBtn)', function(data){
+                //layer.msg(JSON.stringify(data.field));
+                var str=JSON.stringify(data.field);
+                var data;
+                layer.msg(str);
+                // 转换 {"name":"gsfs"}
+                var json = eval('('+str+')');
+
+                postData.name=json.name;//直接取值 结果0
+                console.log("name: "+name);
+                init();
+                return false;
+            });
+
+            // 表格初始化 ------------------
+            function init (){
+                // 列表请求
+                send(postData);
+                // 完成表格数据
+                $.extend(infoOptions, {data: data});
+                table.render(infoOptions);
+                data=null;
+            }
+            // 页面初始化---------------------------------
+            init();
+
+            //  分页--------------------
+            laypage.render({
+                elem: 'page',
+                limits:[1,2,30,40,50],
+                prev:"<<",
+                next:">>",
+                theme:"#0099ff",
+                layout: ['count', 'prev', 'page', 'next', 'limit','refresh', 'skip'],
+				groups:2,
+                curr:1,
+                limit:1
+				,count: jsondata.content.totalRecords //数据总数，从服务端得到
+                ,jump: function(obj, first){
+                    //obj包含了当前分页的所有参数，比如：
+                    console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+                    console.log(obj.limit); //得到每页显示的条数
+					$.extend(postData, {pageNumber: obj.curr,pageSize:obj.limit});
+                    init ();
+                    //首次不执行
+                    if(!first){
+                        //do something
+                    }
+                }
+            });
+
+            var postData_add_edit={
+                id:"NULL",
+                name:"NULL",
+                accountno:"NULL",
+                password:"NULL",
+                status:"NULL",
+                idcard:"NULL"
+            };
+            var message;
+            //发送ajax  新增修改ajax
+            function sendAE(postData_add_edit){
+                $.ajax({
+                    type: "POST",//请求的方式
+                    url: "/main/version1/updateemp/"+new Date().getTime(),//请求的接口
+                    data: postData_add_edit,//参数（可传可不传递）
+                    dataType: "json",//数据类型
+                    async:false,
+                    success: function (res) {
+                        console.log("msg "+message);
+                        if(res.code==200){
+                            console.log("ajax msg"+res.message);
+                            message=res.message;
+                        }
+                    },
+                    error:function(err){
+                        alert("系统出错了")
+                    }
+                })
+            }
+            // 新增修改初始化 ------------------
+            function init_AE (){
+                sendAE(postData_add_edit);
+                // 列表请求
+                send(postData);
+                // 完成表格数据
+                $.extend(infoOptions, {data: data});
+                infoOptions.page = {
+                    curr: 1
+                }
+                console.log("data1  "+data[0].id);
+                table.render(infoOptions);
+
+                data=null;
+            }
+            // 监听 单元格，能进行编辑单元格  只有表头加了 edit 属性才能修改  
+            table.on('edit(test3)',function(obj){
+                var value=obj.value; //得到修改后的值
+                var data=obj.data;  //得到所在行的所有键值
+                var field=obj.field;  //得到字段 pwd name           
+                postData_add_edit.id=data.id;
+
+                if(field==='name'){
+                    postData_add_edit.name=value;
+                    console.log("name "+postData_add_edit.name);
+                }
+                if(field==='password'){
+                    postData_add_edit.password=value;
+                    console.log("password "+postData_add_edit.password);
+                }
+                //layer.msg('[ID: '+data.id+']'+field+' 字段给改为 '+value);
+                init_AE ();
+            });
+
+            //  操作  查看 编辑 删除-----------------------------------
+
+            // 监听表格复选框 选择
+            table.on('tool(test3)',function(obj){
+                console.log(obj);
+            });
+            //监听工具条
+            table.on('tool(test3)', function(obj){
+                var data = obj.data;
+                if(obj.event === 'detail'){
+                    layer.msg('ID：'+ data.id + ' 的查看操作');
+                } else if(obj.event === 'del'){
+                    layer.confirm('真的删除行么'+data.id, function(index){
+                        obj.del();
+                        layer.close(index);
+                    });
+                } else if(obj.event === 'edit'){
+                    layer.alert('编辑行：<br>'+ JSON.stringify(data))
+                }
+            });
+
+            //end        
+        });
+	</script>
+</body>
+</html>

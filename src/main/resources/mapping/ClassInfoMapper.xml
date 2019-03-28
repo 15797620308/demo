@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.mapper.ClassInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.example.model.ClassInfo" >
+    <id column="classId" property="classid" jdbcType="SMALLINT" />
+    <result column="className" property="classname" jdbcType="VARCHAR" />
+    <result column="classTime" property="classtime" jdbcType="DATE" />
+    <result column="classMajor" property="classmajor" jdbcType="VARCHAR" />
+    <result column="classNum" property="classnum" jdbcType="SMALLINT" />
+    <association property="teacherInfo" column="teacherId" select="getTeacher"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    classId, className, classTime, classMajor, classNum, teacherId
+  </sql>
+
+  <select id="getTeacher" resultType="com.example.model.TeacherInfo" parameterType="java.lang.Short">
+    select * from teacher_info where teachId = #{teacherId,jdbcType=SMALLINT}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from class_info
+    <if test="filterData != null and filterData !=''">
+      where className LIKE #{filterData} or classMajor LIKE #{filterData}
+    </if>
+  </select>
+
+  <select id="selectCount" resultType="java.lang.Integer" parameterType="java.lang.String">
+    SELECT COUNT(classId) FROM class_info
+    <if test="filterData != null and filterData !=''">
+      where className LIKE #{filterData} or classMajor LIKE #{filterData}
+    </if>
+  </select>
+
+  <!-- 批量删除 -->
+  <delete id="batchDelete" parameterType="int[]">
+    <!-- delete from emp where empno in(7789,7790) -->
+    <!-- forEach : 用来循环 collection : 用来指定循环的数据的类型 可以填的值有：array,list,map item
+        : 循环中为每个循环的数据指定一个别名 index : 循环中循环的下标 open : 开始 close : 结束 separator : 数组中元素之间的分隔符 -->
+    delete from class_info where classId in
+    <foreach collection="arr" item="arr" index="no" open="("
+             separator="," close=")">
+      #{arr}
+    </foreach>
+  </delete>
+
+  <!--- 自动生成 -->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Short" >
+    select 
+    <include refid="Base_Column_List" />
+    from class_info
+    where classId = #{classid,jdbcType=SMALLINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short" >
+    delete from class_info
+    where classId = #{classid,jdbcType=SMALLINT}
+  </delete>
+  <insert id="insert" parameterType="com.example.model.ClassInfo" >
+    insert into class_info (classId, className, classTime, 
+      classMajor, classNum, teacherId
+      )
+    values (#{classid,jdbcType=SMALLINT}, #{classname,jdbcType=VARCHAR}, #{classtime,jdbcType=DATE}, 
+      #{classmajor,jdbcType=VARCHAR}, #{classnum,jdbcType=SMALLINT}, #{teacherInfo.teachid,jdbcType=SMALLINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.model.ClassInfo" >
+    insert into class_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="classid != null" >
+        classId,
+      </if>
+      <if test="classname != null" >
+        className,
+      </if>
+      <if test="classtime != null" >
+        classTime,
+      </if>
+      <if test="classmajor != null" >
+        classMajor,
+      </if>
+      <if test="classnum != null" >
+        classNum,
+      </if>
+      <if test="teacherInfo.teachid != null" >
+        teacherId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="classid != null" >
+        #{classid,jdbcType=SMALLINT},
+      </if>
+      <if test="classname != null" >
+        #{classname,jdbcType=VARCHAR},
+      </if>
+      <if test="classtime != null" >
+        #{classtime,jdbcType=DATE},
+      </if>
+      <if test="classmajor != null" >
+        #{classmajor,jdbcType=VARCHAR},
+      </if>
+      <if test="classnum != null" >
+        #{classnum,jdbcType=SMALLINT},
+      </if>
+      <if test="teacherInfo.teachid != null" >
+        #{teacherInfo.teachid,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.model.ClassInfo" >
+    update class_info
+    <set >
+      <if test="classname != null" >
+        className = #{classname,jdbcType=VARCHAR},
+      </if>
+      <if test="classtime != null" >
+        classTime = #{classtime,jdbcType=DATE},
+      </if>
+      <if test="classmajor != null" >
+        classMajor = #{classmajor,jdbcType=VARCHAR},
+      </if>
+      <if test="classnum != null" >
+        classNum = #{classnum,jdbcType=SMALLINT},
+      </if>
+      <if test="teacherInfo.teachid != null" >
+        teacherId = #{teacherInfo.teachid,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where classId = #{classid,jdbcType=SMALLINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.model.ClassInfo" >
+    update class_info
+    set className = #{classname,jdbcType=VARCHAR},
+      classTime = #{classtime,jdbcType=DATE},
+      classMajor = #{classmajor,jdbcType=VARCHAR},
+      classNum = #{classnum,jdbcType=SMALLINT},
+      teacherId = #{teacherInfo.teachid,jdbcType=SMALLINT}
+    where classId = #{classid,jdbcType=SMALLINT}
+  </update>
+</mapper>

@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<title>登录--学生档案管理系统</title>
+<link rel="stylesheet" href="/layui/css/layui.css" media="all" />
+<link rel="stylesheet" href="/css/login.css" media="all" />
+<link rel="stylesheet" href="/css/test.css" media="all" />
+</head>
+<body>
+	 <video class="video-player" preload="auto" autoplay="autoplay" loop="loop" data-height="1080" data-width="1920" height="1080" width="100%">
+	    <source src="/js/login/login.mp4" type="video/mp4">
+	    <!-- 此视频文件为支付宝所有，在此仅供样式参考，如用到商业用途，请自行更换为其他视频或图片，否则造成的任何问题使用者本人承担，谢谢 -->
+	</video>
+	
+	<div class="video_mask"></div>
+<%-- ---------------------------登录界面-------------------------------------------------------------------------- --%>
+	<div class="login" >
+	    <h1>学生档案管理系统</h1>
+	    <form class="layui-form" action="" method="post">
+	    	<div class="layui-form-item">
+				<input class="layui-input" name="useraccount" placeholder="用户名" lay-verify="required" type="text" autocomplete="off">
+		    </div>
+		    <div class="layui-form-item">
+				<input class="layui-input" name="userpwd" placeholder="密码" lay-verify="required" type="password" autocomplete="off">
+		    </div>
+		    <div class="layui-form-item form_code">
+				<div id="captcha"></div>
+				<div id="msg"></div>
+				<!--<input class="layui-input" name="" placeholder="验证码" lay-verify="required" type="text" autocomplete="off">
+				<div class="code"><img src="/images/code.jpg" width="116" height="36"></div>-->
+		    </div>
+		    <!--<input class="layui-btn login_btn" type="submit" value="登录">-->
+			<button class="layui-btn login_btn" lay-submit lay-filter="login">登录</button>
+			<a  href="/user/test/register" style="margin-left: 0px;color: #009688;">注册</a>
+
+		</form>
+	</div>
+<%-- ----------------------------------------------------------------------------------------------------- --%>
+	<script type="text/javascript" src="/layui/layui.js"></script>
+	<script type="text/javascript" src="/js/login/login.js"></script>
+	<script type="text/javascript" src="/js/test.js"></script>
+</body>
+</html>

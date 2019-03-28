@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员信息管理</title>
+    <link rel="stylesheet" href="/layui01/css/layui.css" media="all" />
+    <style type="text/css">
+        .register{
+            height:310px;
+            width:310px;
+            padding: 20px;
+            background-color:rgba(255,255,255,0.5);border-radius: 4px;
+            position:absolute;left: 42%;top: 25%; margin:-120px 0 0 -175px;z-index:99;
+        }
+    </style>
+</head>
+<body>
+<div class="register">
+    <input type="hidden" id="postWay" value="add">
+    <form class="layui-form" action="" method="post" style="text-align: center;" id="testForm">
+        <input type="hidden" name="courseid" >
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="text-align: center;">名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="coursename" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">年级</label>
+            <div class="layui-input-block">
+                <input type="text"  name ="grade" placeholder="请输入年级" lay-verify="required" id = "grade" class="layui-input userBirthday">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="text-align: center;">课时(节)</label>
+            <div class="layui-input-block">
+                <input type="text" name="coursetime" lay-verify="required|number" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <button class="layui-btn login_btn" lay-submit lay-filter="register">提交</button>
+        <button class="layui-btn login_btn" type="reset">重置</button>
+    </form>
+</div>
+<script src="/js/jquery-1.9.1.min.js" ></script>
+<script type="text/javascript" src="/layui01/layui.js"></script>
+<script type="text/javascript" src="/js/register/EditCourseInfo.js"></script>
+<script type="text/javascript" >
+    function setData(data){
+        $("input[name='courseid']").val(data.courseid);
+        $("input[name='coursename']").val(data.coursename);
+        $("input[name='coursetime']").val(data.coursetime);
+        $("input[name='grade']").val(data.grade);
+        $("#postWay").val("edit");
+    }
+</script>
+</body>
+</html>

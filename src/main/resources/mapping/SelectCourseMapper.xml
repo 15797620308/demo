@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.mapper.SelectCourseMapper" >
+  <resultMap id="BaseResultMap" type="com.example.model.SelectCourse" >
+    <id column="selId" property="selid" jdbcType="SMALLINT" />
+    <result column="selName" property="selname" jdbcType="VARCHAR" />
+    <result column="selGrade" property="selgrade" jdbcType="DATE" />
+    <result column="selNum" property="selnum" jdbcType="SMALLINT" />
+    <result column="startTime" property="starttime" jdbcType="TIMESTAMP" />
+    <result column="endTime" property="endtime" jdbcType="TIMESTAMP" />
+    <result column="CourseClass" property="courseclass" jdbcType="VARCHAR" />
+    <result column="SYNum" property="synum" jdbcType="SMALLINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    selId, selName, selGrade, selNum, startTime, endTime, CourseClass,SYNum
+  </sql>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from selete_course
+    <if test="filterData != null and filterData !=''">
+      where selName LIKE #{filterData} or selGrade LIKE #{filterData}
+    </if>
+  </select>
+
+  <select id="selectCount" resultType="java.lang.Integer" parameterType="java.lang.String">
+    SELECT COUNT(selId) FROM selete_course
+    <if test="filterData != null and filterData !=''">
+      where selName LIKE #{filterData} or selGrade LIKE #{filterData}
+    </if>
+  </select>
+
+  <select id="selectByTime" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List" />
+    FROM selete_course
+    where NOW() BETWEEN startTime and endTime and selGrade like #{grade}
+    and SYNum > 0
+  </select>
+
+  <select id="selectCByTime" resultType="java.lang.Integer" parameterType="java.lang.String">
+    SELECT COUNT(selId) FROM selete_course
+    where NOW() BETWEEN startTime and endTime and selGrade like #{grade}
+    and SYNum > 0
+  </select>
+
+  <!-- 批量删除 -->
+  <delete id="batchDelete" parameterType="int[]">
+    <!-- delete from emp where empno in(7789,7790) -->
+    <!-- forEach : 用来循环 collection : 用来指定循环的数据的类型 可以填的值有：array,list,map item
+        : 循环中为每个循环的数据指定一个别名 index : 循环中循环的下标 open : 开始 close : 结束 separator : 数组中元素之间的分隔符 -->
+    delete from selete_course where selId in
+    <foreach collection="arr" item="arr" index="no" open="("
+             separator="," close=")">
+      #{arr}
+    </foreach>
+  </delete>
+
+  <!--- 自动生成 -->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Short" >
+    select 
+    <include refid="Base_Column_List" />
+    from selete_course
+    where selId = #{selid,jdbcType=SMALLINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short" >
+    delete from selete_course
+    where selId = #{selid,jdbcType=SMALLINT}
+  </delete>
+  <insert id="insert" parameterType="com.example.model.SelectCourse" >
+    insert into selete_course (selId, selName, selGrade, 
+      selNum, startTime, endTime, 
+      CourseClass,SYNum)
+    values (#{selid,jdbcType=SMALLINT}, #{selname,jdbcType=VARCHAR}, #{selgrade,jdbcType=DATE}, 
+      #{selnum,jdbcType=SMALLINT}, #{starttime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}, 
+      #{courseclass,jdbcType=VARCHAR},#{synum,jdbcType=SMALLINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.model.SelectCourse" >
+    insert into selete_course
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="selid != null" >
+        selId,
+      </if>
+      <if test="selname != null" >
+        selName,
+      </if>
+      <if test="selgrade != null" >
+        selGrade,
+      </if>
+      <if test="selnum != null" >
+        selNum,
+      </if>
+      <if test="starttime != null" >
+        startTime,
+      </if>
+      <if test="endtime != null" >
+        endTime,
+      </if>
+      <if test="courseclass != null" >
+        CourseClass,
+      </if>
+      <if test="synum != null" >
+        SYNum,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="selid != null" >
+        #{selid,jdbcType=SMALLINT},
+      </if>
+      <if test="selname != null" >
+        #{selname,jdbcType=VARCHAR},
+      </if>
+      <if test="selgrade != null" >
+        #{selgrade,jdbcType=DATE},
+      </if>
+      <if test="selnum != null" >
+        #{selnum,jdbcType=SMALLINT},
+      </if>
+      <if test="starttime != null" >
+        #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="courseclass != null" >
+        #{courseclass,jdbcType=VARCHAR},
+      </if>
+      <if test="synum != null" >
+        #{synum,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.model.SelectCourse" >
+    update selete_course
+    <set >
+      <if test="selname != null" >
+        selName = #{selname,jdbcType=VARCHAR},
+      </if>
+      <if test="selgrade != null" >
+        selGrade = #{selgrade,jdbcType=DATE},
+      </if>
+      <if test="selnum != null" >
+        selNum = #{selnum,jdbcType=SMALLINT},
+      </if>
+      <if test="starttime != null" >
+        startTime = #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        endTime = #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="courseclass != null" >
+        CourseClass = #{courseclass,jdbcType=VARCHAR},
+      </if>
+      <if test="synum != null" >
+        SYNum = #{synum,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where selId = #{selid,jdbcType=SMALLINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.model.SelectCourse" >
+    update selete_course
+    set selName = #{selname,jdbcType=VARCHAR},
+      selGrade = #{selgrade,jdbcType=DATE},
+      selNum = #{selnum,jdbcType=SMALLINT},
+      startTime = #{starttime,jdbcType=TIMESTAMP},
+      endTime = #{endtime,jdbcType=TIMESTAMP},
+      CourseClass = #{courseclass,jdbcType=VARCHAR},
+      SYNum = #{synum,jdbcType=SMALLINT}
+    where selId = #{selid,jdbcType=SMALLINT}
+  </update>
+</mapper>

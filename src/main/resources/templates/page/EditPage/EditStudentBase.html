@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员信息管理</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all" />
+    <style type="text/css">
+        .register{
+            height:310px;
+            width:310px;
+            padding: 20px;
+            background-color:rgba(255,255,255,0.5);border-radius: 4px;
+            position:absolute;left: 42%;top: 25%; margin:-120px 0 0 -175px;z-index:99;
+        }
+    </style>
+</head>
+<body>
+<div class="register">
+    <input type="hidden" id="postWay" value="add">
+    <form class="layui-form" action="" method="post" style="text-align: center;" id="testForm">
+        <input type="hidden" name="stuid" >
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="text-align: center;">姓名</label>
+            <div class="layui-input-block">
+                <input type="text" name="stuname" lay-verify="username" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="text-align: center;">家庭成员</label>
+            <div class="layui-input-block">
+                <input type="text" name="stufamily" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">出生年月</label>
+            <div class="layui-input-block">
+                <input type="text"  name ="stubrith" placeholder="请输入出生年月" lay-verify="required|date" onclick="layui.laydate({elem: this,max: laydate.now()})" class="layui-input userBirthday">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="text-align: center;">家庭住址</label>
+            <div class="layui-input-block">
+                <input type="text" name="stuaddress" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="text-align: center;">民族</label>
+            <div class="layui-input-block">
+                <input type="text" name="stunation" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item" >
+            <label class="layui-form-label" style="text-align: center;">性别</label>
+            <div class="layui-input-block userSex">
+                <input type="radio" name="stusex" value="男" title="男" id="man">
+                <input type="radio" name="stusex" value="女" title="女" id="women">
+            </div>
+        </div>
+        <button class="layui-btn login_btn" lay-submit lay-filter="register">提交</button>
+        <button class="layui-btn login_btn" type="reset">重置</button>
+    </form>
+</div>
+<script src="/js/jquery-1.9.1.min.js" ></script>
+<script type="text/javascript" src="/layui/layui.js"></script>
+<script type="text/javascript" src="/js/register/EditStudentBase.js"></script>
+<script type="text/javascript" >
+    function setData(data){
+        $("input[name='stuid']").val(data.stuid);
+        $("input[name='stuname']").val(data.stuname);
+        $("input[name='stubrith']").val(data.stubrith);
+        $("input[name='stufamily']").val(data.stufamily);
+        $("input[name='stuaddress']").val(data.stuaddress);
+        $("input[name='stunation']").val(data.stunation);
+        $("#postWay").val("edit");
+        layui.use('form', function () {
+            var $ = layui.jquery;//重点在layui中引用JQ必须写这一句
+            var form = layui.form();
+            $(".userSex input[value="+data.stusex+"]").attr("checked","checked"); //性别
+            form.render();
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.mapper.CourseInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.example.model.CourseInfo" >
+    <id column="courseId" property="courseid" jdbcType="SMALLINT" />
+    <result column="courseName" property="coursename" jdbcType="VARCHAR" />
+    <result column="courseTime" property="coursetime" jdbcType="SMALLINT" />
+    <result column="grade" property="grade" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    courseId, courseName, courseTime, grade
+  </sql>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from course_info
+    <if test="filterData != null and filterData !=''">
+      where courseName LIKE #{filterData} or grade LIKE #{filterData}
+    </if>
+  </select>
+
+  <select id="selectCount" resultType="java.lang.Integer" parameterType="java.lang.String">
+    SELECT COUNT(courseId) FROM course_info
+    <if test="filterData != null and filterData !=''">
+      where courseName LIKE #{filterData} or grade LIKE #{filterData}
+    </if>
+  </select>
+
+  <!-- 批量删除 -->
+  <delete id="batchDelete" parameterType="int[]">
+    <!-- delete from emp where empno in(7789,7790) -->
+    <!-- forEach : 用来循环 collection : 用来指定循环的数据的类型 可以填的值有：array,list,map item
+        : 循环中为每个循环的数据指定一个别名 index : 循环中循环的下标 open : 开始 close : 结束 separator : 数组中元素之间的分隔符 -->
+    delete from course_info where courseId in
+    <foreach collection="arr" item="arr" index="no" open="("
+             separator="," close=")">
+      #{arr}
+    </foreach>
+  </delete>
+
+  <!--- 自动生成 -->
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Short" >
+    select 
+    <include refid="Base_Column_List" />
+    from course_info
+    where courseId = #{courseid,jdbcType=SMALLINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short" >
+    delete from course_info
+    where courseId = #{courseid,jdbcType=SMALLINT}
+  </delete>
+  <insert id="insert" parameterType="com.example.model.CourseInfo" >
+    insert into course_info (courseId, courseName, courseTime, 
+      grade)
+    values (#{courseid,jdbcType=SMALLINT}, #{coursename,jdbcType=VARCHAR}, #{coursetime,jdbcType=SMALLINT}, 
+      #{grade,jdbcType=DATE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.model.CourseInfo" >
+    insert into course_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="courseid != null" >
+        courseId,
+      </if>
+      <if test="coursename != null" >
+        courseName,
+      </if>
+      <if test="coursetime != null" >
+        courseTime,
+      </if>
+      <if test="grade != null" >
+        grade,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="courseid != null" >
+        #{courseid,jdbcType=SMALLINT},
+      </if>
+      <if test="coursename != null" >
+        #{coursename,jdbcType=VARCHAR},
+      </if>
+      <if test="coursetime != null" >
+        #{coursetime,jdbcType=SMALLINT},
+      </if>
+      <if test="grade != null" >
+        #{grade,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.model.CourseInfo" >
+    update course_info
+    <set >
+      <if test="coursename != null" >
+        courseName = #{coursename,jdbcType=VARCHAR},
+      </if>
+      <if test="coursetime != null" >
+        courseTime = #{coursetime,jdbcType=SMALLINT},
+      </if>
+      <if test="grade != null" >
+        grade = #{grade,jdbcType=DATE},
+      </if>
+    </set>
+    where courseId = #{courseid,jdbcType=SMALLINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.model.CourseInfo" >
+    update course_info
+    set courseName = #{coursename,jdbcType=VARCHAR},
+      courseTime = #{coursetime,jdbcType=SMALLINT},
+      grade = #{grade,jdbcType=DATE}
+    where courseId = #{courseid,jdbcType=SMALLINT}
+  </update>
+</mapper>

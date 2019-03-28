@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户注册</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all" />
+    <style type="text/css">
+        .register{
+            height:310px;
+            width:310px;
+            padding: 20px;
+            background-color:rgba(255,255,255,0.5);border-radius: 4px;
+            position:absolute;left: 42%;top: 25%; margin:-100px 0 0 -175px;z-index:99;
+        }
+    </style>
+</head>
+<body>
+<div class="register">
+    <input type="hidden" id="postWay" value="add">
+    <form class="layui-form" action="" method="post" style="text-align: center;" id="testForm">
+        <input type="hidden" name="accountid" >
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="text-align: center;">用户名</label>
+            <div class="layui-input-block">
+                <input type="text" name="username" lay-verify="username" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="text-align: center;">编号</label>
+            <div class="layui-input-block">
+                <input type="text" name="usercode" lay-verify="code" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="text-align: center;">账号</label>
+            <div class="layui-input-block">
+                <input type="text" name="useraccount" lay-verify="account" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="text-align: center;">角色</label>
+            <div class="layui-input-block">
+                <select name="userrole" lay-verify="role" id="role">
+                    <option value="">请选择注册的角色</option>
+                    <option value="管理员">管理员</option>
+                    <option value="老师">老师</option>
+                    <option value="学生">学生</option>
+                </select>
+            </div>
+        </div>
+        <button class="layui-btn login_btn" lay-submit lay-filter="register">提交</button>
+        <button class="layui-btn login_btn" type="reset">重置</button>
+    </form>
+</div>
+<script src="/js/jquery-1.9.1.min.js" ></script>
+<script type="text/javascript" src="/layui/layui.js"></script>
+<script type="text/javascript" src="/js/register/changeAccount.js"></script>
+<script type="text/javascript" >
+    function setData(data){
+        var username =  $("input[name='username']");
+        var usercode =  $("input[name='usercode']");
+        var useraccount =  $("input[name='useraccount']");
+        var accountid =  $("input[name='accountid']");
+        var postWay = $("#postWay");
+        username.val(data.username);
+        usercode.val(data.usercode);
+        useraccount.val(data.useraccount);
+        postWay.val("edit");
+        accountid.val(data.accountid);
+        layui.use('form', function () {
+            var $ = layui.jquery;//重点在layui中引用JQ必须写这一句
+            var form = layui.form();
+                $("#role").val(data.userrole);
+                $('#role').attr('disabled',"disabled");
+                form.render('select', 'testForm');
+        });
+        usercode.attr("readonly","true");
+    }
+</script>
+</body>
+</html>

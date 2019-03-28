@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.mapper.StudentInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.example.model.StudentInfo" >
+    <id column="stuId" property="stuid" jdbcType="SMALLINT" />
+    <result column="stuStart" property="stustart" jdbcType="DATE" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="stuMajor" property="stumajor" jdbcType="VARCHAR" />
+    <association property="studentBase" column="stuBaseId" select="getStudentBase"/>
+    <association property="classInfo" column="stuClass" select="getClassInfo"/>
+    <association property="teacherInfo" column="stuTeacher" select="getTeacher"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    stuId, stuBaseId, stuClass, stuStart, phone, stuTeacher, stuMajor
+  </sql>
+  
+  <select id="getStudentBase" resultType="com.example.model.StudentBase" parameterType="java.lang.Short">
+    select * from stu_base where stuId = #{stuBaseId,jdbcType=SMALLINT}
+  </select>
+
+  <select id="getClassInfo" resultType="com.example.model.ClassInfo" parameterType="java.lang.Short">
+    select * from class_info where classId = #{stuClass,jdbcType=SMALLINT}
+  </select>
+
+  <select id="getTeacher" resultType="com.example.model.TeacherInfo" parameterType="java.lang.Short">
+    select * from teacher_info where teachId = #{stuTeacher,jdbcType=SMALLINT}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stu_info
+    <if test="filterData != null and filterData !=''">
+      where stuMajor LIKE #{filterData}
+    </if>
+  </select>
+
+  <select id="selectCount" resultType="java.lang.Integer" parameterType="java.lang.String">
+    SELECT COUNT(stuId) FROM stu_info
+    <if test="filterData != null and filterData !=''">
+      where stuMajor LIKE #{filterData}
+    </if>
+  </select>
+
+  <!-- 批量删除 -->
+  <delete id="batchDelete" parameterType="int[]">
+    <!-- delete from emp where empno in(7789,7790) -->
+    <!-- forEach : 用来循环 collection : 用来指定循环的数据的类型 可以填的值有：array,list,map item
+        : 循环中为每个循环的数据指定一个别名 index : 循环中循环的下标 open : 开始 close : 结束 separator : 数组中元素之间的分隔符 -->
+    delete from stu_info where stuId in
+    <foreach collection="arr" item="arr" index="no" open="("
+             separator="," close=")">
+      #{arr}
+    </foreach>
+  </delete>
+
+  <!--- 自动生成 -->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Short" >
+    select 
+    <include refid="Base_Column_List" />
+    from stu_info
+    where stuId = #{stuid,jdbcType=SMALLINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short" >
+    delete from stu_info
+    where stuId = #{stuid,jdbcType=SMALLINT}
+  </delete>
+  <insert id="insert" parameterType="com.example.model.StudentInfo" >
+    insert into stu_info (stuId, stuBaseId, stuClass, 
+      stuStart, phone, stuTeacher, 
+      stuMajor)
+    values (#{stuid,jdbcType=SMALLINT}, #{studentBase.stuid,jdbcType=SMALLINT}, #{classInfo.classid,jdbcType=SMALLINT},
+      #{stustart,jdbcType=DATE}, #{phone,jdbcType=VARCHAR}, #{teacherInfo.teachid,jdbcType=SMALLINT},
+      #{stumajor,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.model.StudentInfo" >
+    insert into stu_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="stuid != null" >
+        stuId,
+      </if>
+      <if test="studentBase.stuid != null" >
+        stuBaseId,
+      </if>
+      <if test="classInfo.classid != null" >
+        stuClass,
+      </if>
+      <if test="stustart != null" >
+        stuStart,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="teacherInfo.teachid != null" >
+        stuTeacher,
+      </if>
+      <if test="stumajor != null" >
+        stuMajor,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="stuid != null" >
+        #{stuid,jdbcType=SMALLINT},
+      </if>
+      <if test="studentBase.stuid != null" >
+        #{studentBase.stuid,jdbcType=SMALLINT},
+      </if>
+      <if test="classInfo.classid != null" >
+        #{classInfo.classid,jdbcType=SMALLINT},
+      </if>
+      <if test="stustart != null" >
+        #{stustart,jdbcType=DATE},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherInfo.teachid != null" >
+        #{teacherInfo.teachid,jdbcType=SMALLINT},
+      </if>
+      <if test="stumajor != null" >
+        #{stumajor,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.model.StudentInfo" >
+    update stu_info
+    <set >
+      <if test="studentBase.stuid != null" >
+        stuBaseId = #{studentBase.stuid,jdbcType=SMALLINT},
+      </if>
+      <if test="classInfo.classid != null" >
+        stuClass = #{classInfo.classid,jdbcType=SMALLINT},
+      </if>
+      <if test="stustart != null" >
+        stuStart = #{stustart,jdbcType=DATE},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherInfo.teachid != null" >
+        stuTeacher = #{teacherInfo.teachid,jdbcType=SMALLINT},
+      </if>
+      <if test="stumajor != null" >
+        stuMajor = #{stumajor,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where stuId = #{stuid,jdbcType=SMALLINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.model.StudentInfo" >
+    update stu_info
+    set stuBaseId = #{studentBase.stuid,jdbcType=SMALLINT},
+      stuClass = #{classInfo.classid,jdbcType=SMALLINT},
+      stuStart = #{stustart,jdbcType=DATE},
+      phone = #{phone,jdbcType=VARCHAR},
+      stuTeacher = #{teacherInfo.teachid,jdbcType=SMALLINT},
+      stuMajor = #{stumajor,jdbcType=VARCHAR}
+    where stuId = #{stuid,jdbcType=SMALLINT}
+  </update>
+</mapper>

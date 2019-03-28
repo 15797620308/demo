@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.mapper.ManagerInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.example.model.ManagerInfo" >
+    <id column="manId" property="manid" jdbcType="SMALLINT" />
+    <result column="manName" property="manname" jdbcType="VARCHAR" />
+    <result column="manSex" property="mansex" jdbcType="VARCHAR" />
+    <result column="manAge" property="manage" jdbcType="SMALLINT" />
+    <result column="manTry" property="mantry" jdbcType="DATE" />
+    <result column="isWork" property="iswork" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    manId, manName, manSex, manAge, manTry, isWork, phone
+  </sql>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from manager_info
+    <if test="filterData != null and filterData !=''">
+      where manName LIKE #{filterData} or isWork LIKE #{filterData}
+    </if>
+  </select>
+
+  <select id="selectCount" resultType="java.lang.Integer" parameterType="java.lang.String">
+    SELECT COUNT(manId) FROM manager_info
+    <if test="filterData != null and filterData !=''">
+      where manName LIKE #{filterData} or isWork LIKE #{filterData}
+    </if>
+  </select>
+
+  <!-- 批量删除 -->
+  <delete id="batchDelete" parameterType="int[]">
+    <!-- delete from emp where empno in(7789,7790) -->
+    <!-- forEach : 用来循环 collection : 用来指定循环的数据的类型 可以填的值有：array,list,map item
+        : 循环中为每个循环的数据指定一个别名 index : 循环中循环的下标 open : 开始 close : 结束 separator : 数组中元素之间的分隔符 -->
+    delete from manager_info where manId in
+    <foreach collection="arr" item="arr" index="no" open="("
+             separator="," close=")">
+      #{arr}
+    </foreach>
+  </delete>
+
+  <!--- 自动生成 -->
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Short" >
+    select 
+    <include refid="Base_Column_List" />
+    from manager_info
+    where manId = #{manid,jdbcType=SMALLINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short" >
+    delete from manager_info
+    where manId = #{manid,jdbcType=SMALLINT}
+  </delete>
+  <insert id="insert" parameterType="com.example.model.ManagerInfo" >
+    insert into manager_info (manId, manName, manSex, 
+      manAge, manTry, isWork, 
+      phone)
+    values (#{manid,jdbcType=SMALLINT}, #{manname,jdbcType=VARCHAR}, #{mansex,jdbcType=VARCHAR}, 
+      #{manage,jdbcType=SMALLINT}, #{mantry,jdbcType=DATE}, #{iswork,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.model.ManagerInfo" >
+    insert into manager_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="manid != null" >
+        manId,
+      </if>
+      <if test="manname != null" >
+        manName,
+      </if>
+      <if test="mansex != null" >
+        manSex,
+      </if>
+      <if test="manage != null" >
+        manAge,
+      </if>
+      <if test="mantry != null" >
+        manTry,
+      </if>
+      <if test="iswork != null" >
+        isWork,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="manid != null" >
+        #{manid,jdbcType=SMALLINT},
+      </if>
+      <if test="manname != null" >
+        #{manname,jdbcType=VARCHAR},
+      </if>
+      <if test="mansex != null" >
+        #{mansex,jdbcType=VARCHAR},
+      </if>
+      <if test="manage != null" >
+        #{manage,jdbcType=SMALLINT},
+      </if>
+      <if test="mantry != null" >
+        #{mantry,jdbcType=DATE},
+      </if>
+      <if test="iswork != null" >
+        #{iswork,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.model.ManagerInfo" >
+    update manager_info
+    <set >
+      <if test="manname != null" >
+        manName = #{manname,jdbcType=VARCHAR},
+      </if>
+      <if test="mansex != null" >
+        manSex = #{mansex,jdbcType=VARCHAR},
+      </if>
+      <if test="manage != null" >
+        manAge = #{manage,jdbcType=SMALLINT},
+      </if>
+      <if test="mantry != null" >
+        manTry = #{mantry,jdbcType=DATE},
+      </if>
+      <if test="iswork != null" >
+        isWork = #{iswork,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where manId = #{manid,jdbcType=SMALLINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.model.ManagerInfo" >
+    update manager_info
+    set manName = #{manname,jdbcType=VARCHAR},
+      manSex = #{mansex,jdbcType=VARCHAR},
+      manAge = #{manage,jdbcType=SMALLINT},
+      manTry = #{mantry,jdbcType=DATE},
+      isWork = #{iswork,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR}
+    where manId = #{manid,jdbcType=SMALLINT}
+  </update>
+</mapper>

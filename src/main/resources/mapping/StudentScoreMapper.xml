@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.mapper.StudentScoreMapper" >
+  <resultMap id="BaseResultMap" type="com.example.model.StudentScore" >
+    <id column="scoreId" property="scoreid" jdbcType="SMALLINT" />
+    <result column="stuScore" property="stuscore" jdbcType="DOUBLE" />
+    <result column="testTime" property="testtime" jdbcType="DATE" />
+    <result column="isPass" property="ispass" jdbcType="VARCHAR" />
+    <association property="studentBase" column="stuId" select="getStudentBase"/>
+    <association property="classInfo" column="classId" select="getClassInfo"/>
+    <association property="teacherInfo" column="teacherId" select="getTeacher"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    scoreId, stuId, classId, stuScore, testTime, isPass, teacherId
+  </sql>
+
+  <select id="getStudentBase" resultType="com.example.model.StudentBase" parameterType="java.lang.Short">
+    select * from stu_base where stuId = #{stuId,jdbcType=SMALLINT}
+  </select>
+
+  <select id="getClassInfo" resultType="com.example.model.ClassInfo" parameterType="java.lang.Short">
+    select * from class_info where classId = #{classId,jdbcType=SMALLINT}
+  </select>
+
+  <select id="getTeacher" resultType="com.example.model.TeacherInfo" parameterType="java.lang.Short">
+    select * from teacher_info where teachId = #{teacherId,jdbcType=SMALLINT}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stu_score
+    <if test="filterData != null and filterData !=''">
+      where stuScore LIKE #{filterData} or isPass LIKE #{filterData}
+    </if>
+  </select>
+
+  <select id="selectCount" resultType="java.lang.Integer" parameterType="java.lang.String">
+    SELECT COUNT(scoreId) FROM stu_score
+    <if test="filterData != null and filterData !=''">
+      where stuScore LIKE #{filterData} or isPass LIKE #{filterData}
+    </if>
+  </select>
+
+  <select id="selectByStuId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stu_score where stuId = #{stuId}
+  </select>
+
+  <select id="selectCBySyuId" resultType="java.lang.Integer" parameterType="java.lang.Short">
+    SELECT COUNT(scoreId) FROM stu_score where stuId = #{stuId}
+  </select>
+
+  <!-- 批量删除 -->
+  <delete id="batchDelete" parameterType="int[]">
+    <!-- delete from emp where empno in(7789,7790) -->
+    <!-- forEach : 用来循环 collection : 用来指定循环的数据的类型 可以填的值有：array,list,map item
+        : 循环中为每个循环的数据指定一个别名 index : 循环中循环的下标 open : 开始 close : 结束 separator : 数组中元素之间的分隔符 -->
+    delete from stu_score where scoreId in
+    <foreach collection="arr" item="arr" index="no" open="("
+             separator="," close=")">
+      #{arr}
+    </foreach>
+  </delete>
+
+  <!--- 自动生成 -->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Short" >
+    select 
+    <include refid="Base_Column_List" />
+    from stu_score
+    where scoreId = #{scoreid,jdbcType=SMALLINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short" >
+    delete from stu_score
+    where scoreId = #{scoreid,jdbcType=SMALLINT}
+  </delete>
+  <insert id="insert" parameterType="com.example.model.StudentScore" >
+    insert into stu_score (scoreId, stuId, classId, 
+      stuScore, testTime, isPass, 
+      teacherId)
+    values (#{scoreid,jdbcType=SMALLINT}, #{studentBase.stuid,jdbcType=SMALLINT}, #{classInfo.classid,jdbcType=SMALLINT},
+      #{stuscore,jdbcType=DOUBLE}, #{testtime,jdbcType=DATE}, #{ispass,jdbcType=VARCHAR}, 
+      #{teacherInfo.teachid,jdbcType=SMALLINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.model.StudentScore" >
+    insert into stu_score
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="scoreid != null" >
+        scoreId,
+      </if>
+      <if test="studentBase.stuid != null" >
+        stuId,
+      </if>
+      <if test="classInfo.classid != null" >
+        classId,
+      </if>
+      <if test="stuscore != null" >
+        stuScore,
+      </if>
+      <if test="testtime != null" >
+        testTime,
+      </if>
+      <if test="ispass != null" >
+        isPass,
+      </if>
+      <if test="teacherInfo.teachid != null" >
+        teacherId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="scoreid != null" >
+        #{scoreid,jdbcType=SMALLINT},
+      </if>
+      <if test="studentBase.stuid != null" >
+        #{studentBase.stuid,jdbcType=SMALLINT},
+      </if>
+      <if test="classInfo.classid != null" >
+        #{classInfo.classid,jdbcType=SMALLINT},
+      </if>
+      <if test="stuscore != null" >
+        #{stuscore,jdbcType=DOUBLE},
+      </if>
+      <if test="testtime != null" >
+        #{testtime,jdbcType=DATE},
+      </if>
+      <if test="ispass != null" >
+        #{ispass,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherInfo.teachid != null" >
+        #{teacherInfo.teachid,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.model.StudentScore" >
+    update stu_score
+    <set >
+      <if test="studentBase.stuid != null" >
+        stuId = #{studentBase.stuid,jdbcType=SMALLINT},
+      </if>
+      <if test="classInfo.classid != null" >
+        classId = #{classInfo.classid,jdbcType=SMALLINT},
+      </if>
+      <if test="stuscore != null" >
+        stuScore = #{stuscore,jdbcType=DOUBLE},
+      </if>
+      <if test="testtime != null" >
+        testTime = #{testtime,jdbcType=DATE},
+      </if>
+      <if test="ispass != null" >
+        isPass = #{ispass,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherInfo.teachid != null" >
+        teacherId = #{teacherInfo.teachid,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where scoreId = #{scoreid,jdbcType=SMALLINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.model.StudentScore" >
+    update stu_score
+    set stuId = #{studentBase.stuid,jdbcType=SMALLINT},
+      classId = #{classInfo.classid,jdbcType=SMALLINT},
+      stuScore = #{stuscore,jdbcType=DOUBLE},
+      testTime = #{testtime,jdbcType=DATE},
+      isPass = #{ispass,jdbcType=VARCHAR},
+      teacherId = #{teacherInfo.teachid,jdbcType=SMALLINT}
+    where scoreId = #{scoreid,jdbcType=SMALLINT}
+  </update>
+</mapper>

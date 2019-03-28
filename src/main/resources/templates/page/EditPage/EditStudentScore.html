@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>成绩信息管理</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all" />
+    <style type="text/css">
+        .register{
+            height:310px;
+            width:310px;
+            padding: 20px;
+            background-color:rgba(255,255,255,0.5);border-radius: 4px;
+            position:absolute;left: 42%;top: 25%; margin:-120px 0 0 -175px;z-index:99;
+        }
+    </style>
+</head>
+<body>
+<div class="register">
+    <input type="hidden" id="postWay" value="add">
+    <form class="layui-form" action="" method="post" style="text-align: center;" id="testForm">
+        <input type="hidden" name="scoreid" >
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="text-align: center;">学生</label>
+            <div class="layui-input-block">
+                <select name="studentBase.stuid" lay-verify="required">
+                    <option value="" >请选择学生</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="text-align: center;">班号</label>
+            <div class="layui-input-block">
+                <select name="classInfo.classid" lay-verify="required">
+                    <option value="" >请选择班级</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="text-align: center;">分数</label>
+            <div class="layui-input-block">
+                <input type="text" name="stuscore" lay-verify="required|number" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">考试时间</label>
+            <div class="layui-input-block">
+                <input type="text"  name ="testtime" placeholder="请输入入校时间" lay-verify="required|date" onclick="layui.laydate({elem: this,max: laydate.now()})" class="layui-input userBirthday">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="text-align: center;">老师</label>
+            <div class="layui-input-block">
+                <select name="teacherInfo.teachid" lay-verify="required">
+                    <option value="" >请选择老师</option>
+                </select>
+            </div>
+        </div>
+        <button class="layui-btn login_btn" lay-submit lay-filter="register">提交</button>
+        <button class="layui-btn login_btn" type="reset">重置</button>
+    </form>
+</div>
+<script src="/js/jquery-1.9.1.min.js" ></script>
+<script type="text/javascript" src="/layui/layui.js"></script>
+<script type="text/javascript" src="/js/register/EditStudentScore.js"></script>
+<script type="text/javascript" >
+    function setData(data){
+        //console.log(JSON.stringify(data));
+        $("input[name='scoreid']").val(data.scoreid);
+        $("input[name='stuscore']").val(data.stuscore).attr("readonly","true");
+        $("input[name='testtime']").val(data.testtime);
+        $("#postWay").val("edit");
+        layui.use('form', function () {
+            var $ = layui.jquery;//重点在layui中引用JQ必须写这一句
+            var form = layui.form();
+            setTimeout(function () {
+                $("select[name='studentBase.stuid']").val(data.studentBase.stuid);
+                $("select[name='classInfo.classid']").val(data.classInfo.classid);
+                $("select[name='teacherInfo.teachid']").val(data.teacherInfo.teachid);
+                //$('#role').attr('disabled',"disabled");
+                form.render('select');
+            },500);
+        });
+    }
+</script>
+</body>
+</html>

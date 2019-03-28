@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.mapper.AccountInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.example.model.AccountInfo" >
+    <id column="accountId" property="accountid" jdbcType="SMALLINT" />
+    <result column="userName" property="username" jdbcType="VARCHAR" />
+    <result column="userCode" property="usercode" jdbcType="SMALLINT" />
+    <result column="userAccount" property="useraccount" jdbcType="VARCHAR" />
+    <result column="userPwd" property="userpwd" jdbcType="VARCHAR" />
+    <result column="userRole" property="userrole" jdbcType="VARCHAR" />
+    <result column="imgURL" property="imgurl" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="RoleResultMap" type="com.example.model.RoleInfo" >
+    <result column="userRole" property="name" jdbcType="VARCHAR" />
+    <result column="roleNum" property="value" jdbcType="INTEGER" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    accountId, userName, userCode, userAccount, userPwd, userRole,imgURL
+  </sql>
+
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List" />
+    from account_info
+    <if test="filterData != null and filterData !=''">
+      where userName LIKE #{filterData} or userRole LIKE #{filterData}
+    </if>
+  </select>
+
+  <select id="selectCount" resultType="java.lang.Integer" parameterType="java.lang.String">
+   SELECT COUNT(accountId) FROM account_info
+    <if test="filterData != null and filterData !=''">
+      where userName LIKE #{filterData} or userRole LIKE #{filterData}
+    </if>
+  </select>
+
+  <select id="roleSelect" resultMap="RoleResultMap">
+    select count(accountId) as roleNum,userRole from account_info GROUP BY userRole
+  </select>
+  <!-- 批量删除 -->
+  <delete id="batchDelete" parameterType="int[]">
+    <!-- delete from emp where empno in(7789,7790) -->
+    <!-- forEach : 用来循环 collection : 用来指定循环的数据的类型 可以填的值有：array,list,map item
+        : 循环中为每个循环的数据指定一个别名 index : 循环中循环的下标 open : 开始 close : 结束 separator : 数组中元素之间的分隔符 -->
+    delete from account_info where accountId in
+    <foreach collection="arr" item="arr" index="no" open="("
+             separator="," close=")">
+      #{arr}
+    </foreach>
+  </delete>
+
+  <select id="selectOnly" parameterType="com.example.model.AccountInfo" resultType="java.lang.Integer">
+    select COUNT(accountId) from account_info
+    where userCode = #{usercode,jdbcType=SMALLINT} and userRole = #{userrole,jdbcType=VARCHAR}
+  </select>
+
+  <update id="updateImg" parameterType="com.example.model.AccountInfo">
+    update account_info
+    set imgURL = #{imgurl,jdbcType=VARCHAR}
+    where accountId = #{accountid,jdbcType=SMALLINT}
+  </update>
+  <!--- 自动生成 -->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Short" >
+    select 
+    <include refid="Base_Column_List" />
+    from account_info
+    where accountId = #{accountid,jdbcType=SMALLINT}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short" >
+    delete from account_info
+    where accountId = #{accountid,jdbcType=SMALLINT}
+  </delete>
+
+  <insert id="insert" parameterType="com.example.model.AccountInfo" >
+    insert into account_info (accountId, userName, userCode, 
+      userAccount, userPwd, userRole
+      )
+    values (#{accountid,jdbcType=SMALLINT}, #{username,jdbcType=VARCHAR}, #{usercode,jdbcType=SMALLINT}, 
+      #{useraccount,jdbcType=VARCHAR}, #{userpwd,jdbcType=VARCHAR}, #{userrole,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.model.AccountInfo" >
+    insert into account_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="accountid != null" >
+        accountId,
+      </if>
+      <if test="username != null" >
+        userName,
+      </if>
+      <if test="usercode != null" >
+        userCode,
+      </if>
+      <if test="useraccount != null" >
+        userAccount,
+      </if>
+      <if test="userpwd != null" >
+        userPwd,
+      </if>
+      <if test="userrole != null" >
+        userRole,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="accountid != null" >
+        #{accountid,jdbcType=SMALLINT},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="usercode != null" >
+        #{usercode,jdbcType=SMALLINT},
+      </if>
+      <if test="useraccount != null" >
+        #{useraccount,jdbcType=VARCHAR},
+      </if>
+      <if test="userpwd != null" >
+        #{userpwd,jdbcType=VARCHAR},
+      </if>
+      <if test="userrole != null" >
+        #{userrole,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.model.AccountInfo" >
+    update account_info
+    <set >
+      <if test="username != null" >
+        userName = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="usercode != null" >
+        userCode = #{usercode,jdbcType=SMALLINT},
+      </if>
+      <if test="useraccount != null" >
+        userAccount = #{useraccount,jdbcType=VARCHAR},
+      </if>
+      <if test="userpwd != null" >
+        userPwd = #{userpwd,jdbcType=VARCHAR},
+      </if>
+      <if test="userrole != null" >
+        userRole = #{userrole,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where accountId = #{accountid,jdbcType=SMALLINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.model.AccountInfo" >
+    update account_info
+    set userName = #{username,jdbcType=VARCHAR},
+      userCode = #{usercode,jdbcType=SMALLINT},
+      userAccount = #{useraccount,jdbcType=VARCHAR},
+      userPwd = #{userpwd,jdbcType=VARCHAR},
+      userRole = #{userrole,jdbcType=VARCHAR}
+    where accountId = #{accountid,jdbcType=SMALLINT}
+  </update>
+  <select id="selectByAccount" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from account_info
+    where userAccount = #{useraccount,jdbcType=VARCHAR}
+  </select>
+</mapper>

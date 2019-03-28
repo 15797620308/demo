@@ -1,0 +1,108 @@
+[{
+	"title" : "后台首页",
+	"icon" : "icon-computer",
+	"href" : "/user/test/main",
+	"spread" : false
+},{
+	"title" : "管理员信息管理",
+	"icon" : "icon-text",
+	"href" : "",
+	"spread" : false,
+	"children" : [
+		{
+			"title" : "账号管理",
+			"icon" : "&#xe61c;",
+			"href" : "/user/show/accountManag",
+			"spread" : false
+		},
+		{
+			"title" : "管理员信息管理",
+			"icon" : "&#xe609;",
+			"href" : "/user/show/managerInfo",
+			"spread" : false
+		}
+	]
+},{
+	"title" : "学生基本信息管理",
+	"icon" : "&#xe64c;",
+	"href" : "",
+	"spread" : false,
+	"children" : [
+		{
+			"title" : "基本信息管理",
+			"icon" : "&#xe61c;",
+			"href" : "/user/show/studentBase",
+			"spread" : false
+		},
+		{
+			"title" : "在校信息管理",
+			"icon" : "&#xe609;",
+			"href" : "/user/show/studentInfo",
+			"spread" : false
+		}
+	]
+},{
+	"title" : "学生课程管理",
+	"icon" : "&#xe631;",
+	"href" : "",
+	"spread" : false,
+	"children" : [
+		{
+			"title" : "课程信息",
+			"icon" : "&#xe61c;",
+			"href" : "/user/show/courseInfo",
+			"spread" : false
+		},
+		{
+			"title" : "选课信息",
+			"icon" : "&#xe609;",
+			"href" : "/user/show/selectCourse",
+			"spread" : false
+		},
+		{
+			"title" : "选课结果",
+			"icon" : "&#xe609;",
+			"href" : "/user/show/selectResult",
+			"spread" : false
+		}
+	]
+},{
+	"title" : "学生成绩管理",
+	"icon" : "&#xe630;",
+	"href" : "",
+	"spread" : false,
+	"children" : [
+		{
+			"title" : "成绩信息",
+			"icon" : "&#xe61c;",
+			"href" : "/user/show/studentScore",
+			"spread" : false
+		}
+	]
+},{
+	"title" : "教师信息管理",
+	"icon" : "icon-text",
+	"href" : "",
+	"spread" : false,
+	"children" : [
+		{
+			"title" : "教师信息",
+			"icon" : "&#xe61c;",
+			"href" : "/user/show/teacherInfo",
+			"spread" : false
+		}
+	]
+},{
+	"title" : "班级信息管理",
+	"icon" : "icon-text",
+	"href" : "",
+	"spread" : false,
+	"children" : [
+		{
+			"title" : "班级信息",
+			"icon" : "&#xe61c;",
+			"href" : "/user/show/classInfo",
+			"spread" : false
+		}
+	]
+}]

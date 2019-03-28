@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.mapper.SelectResultMapper" >
+  <resultMap id="BaseResultMap" type="com.example.model.SelectResult" >
+    <id column="resId" property="resid" jdbcType="SMALLINT" />
+    <association property="studentBase" column="stuId" select="getStudentBase"/>
+    <association property="selectCourse" column="selId" select="getSelectCourse"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    resId, stuId, selId
+  </sql>
+
+  <select id="getStudentBase" resultType="com.example.model.StudentBase" parameterType="java.lang.Short">
+    select * from stu_base where stuId = #{stuId,jdbcType=SMALLINT}
+  </select>
+
+  <select id="getSelectCourse" resultType="com.example.model.SelectCourse" parameterType="java.lang.Short">
+    select * from selete_course where selId = #{selId,jdbcType=SMALLINT}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from selete_result
+    <if test="stuId != null and stuId !=''">
+      where  stuId = #{stuId}
+    </if>
+  </select>
+
+  <select id="selectCount" resultType="java.lang.Integer" parameterType="java.lang.Short">
+    SELECT COUNT(resId) FROM selete_result
+    <if test="stuId != null and stuId !=''">
+      where  stuId = #{stuId}
+    </if>
+  </select>
+
+  <!-- 批量删除 -->
+  <delete id="batchDelete" parameterType="int[]">
+    <!-- delete from emp where empno in(7789,7790) -->
+    <!-- forEach : 用来循环 collection : 用来指定循环的数据的类型 可以填的值有：array,list,map item
+        : 循环中为每个循环的数据指定一个别名 index : 循环中循环的下标 open : 开始 close : 结束 separator : 数组中元素之间的分隔符 -->
+    delete from selete_result where resId in
+    <foreach collection="arr" item="arr" index="no" open="("
+             separator="," close=")">
+      #{arr}
+    </foreach>
+  </delete>
+
+  <delete id="deleteByselId" parameterType="java.lang.Short">
+    delete from selete_result
+    where selId = #{resid,jdbcType=SMALLINT}
+  </delete>
+
+  <select id="selectByselId" parameterType="com.example.model.SelectResult" resultMap="BaseResultMap" >
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM selete_result
+    where selId = #{selectCourse.selid,jdbcType=SMALLINT}
+    and stuId = #{studentBase.stuid,jdbcType=SMALLINT}
+  </select>
+
+  <!--- 自动生成 -->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Short" >
+    select 
+    <include refid="Base_Column_List" />
+    from selete_result
+    where resId = #{resid,jdbcType=SMALLINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short" >
+    delete from selete_result
+    where resId = #{resid,jdbcType=SMALLINT}
+  </delete>
+  <insert id="insert" parameterType="com.example.model.SelectResult" >
+    insert into selete_result (resId, stuId, selId
+      )
+    values (#{resid,jdbcType=SMALLINT}, #{studentBase.stuid,jdbcType=SMALLINT}, #{selectCourse.selid,jdbcType=SMALLINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.model.SelectResult" >
+    insert into selete_result
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="resid != null" >
+        resId,
+      </if>
+      <if test="studentBase.stuid != null" >
+        stuId,
+      </if>
+      <if test="selectCourse.selid != null" >
+        selId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="resid != null" >
+        #{resid,jdbcType=SMALLINT},
+      </if>
+      <if test="studentBase.stuid != null" >
+        #{studentBase.stuid,jdbcType=SMALLINT},
+      </if>
+      <if test="selectCourse.selid != null" >
+        #{selectCourse.selid,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.model.SelectResult" >
+    update selete_result
+    <set >
+      <if test="studentBase.stuid != null" >
+        stuId = #{studentBase.stuid,jdbcType=SMALLINT},
+      </if>
+      <if test="selectCourse.selid != null" >
+        selId = #{selectCourse.selid,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where resId = #{resid,jdbcType=SMALLINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.model.SelectResult" >
+    update selete_result
+    set stuId = #{studentBase.stuid,jdbcType=SMALLINT},
+      selId = #{selectCourse.selid,jdbcType=SMALLINT}
+    where resId = #{resid,jdbcType=SMALLINT}
+  </update>
+</mapper>
