@@ -3,14 +3,26 @@ package com.example.service;
 import com.example.mapper.*;
 import com.example.model.*;
 import com.github.pagehelper.PageHelper;
-import com.sun.org.apache.bcel.internal.generic.RETURN;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import org.thymeleaf.util.DateUtils;
 
+import javax.management.ObjectName;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -256,9 +268,13 @@ public class DataService {
             if(account==null){
                 return false;
             }
-            accountInfo.setUserpwd("123456");
-            accountInfoMapper.insertSelective(accountInfo);
-            return true;
+            Integer accountId = accountInfoMapper.selectOnly(accountInfo);
+            if(accountId==null||accountId.equals("")||accountId==0){
+                accountInfo.setUserpwd("123456");
+                accountInfoMapper.insertSelective(accountInfo);
+                return true;
+            }
+            return false;
         }else{
             accountInfoMapper.updateByPrimaryKeySelective(accountInfo);
             return true;
@@ -444,4 +460,64 @@ public class DataService {
         int result = accountInfoMapper.updateImg(accountInfo);
         return result;
     }
-}
+
+    @SuppressWarnings("resource")
+    @Transactional(rollbackFor=Exception.class)
+    public String importExcl(String filename, MultipartFile file)throws IOException {
+        boolean isExcel2003 = true;
+        String str = "";
+        if (filename.matches("^.+\\.(?i)(xlsx)$")) {
+        isExcel2003 = false;
+        }
+        InputStream is = file.getInputStream();
+        Workbook wb = null;
+        if (isExcel2003) {
+        wb = new HSSFWorkbook(is);
+        } else {
+        wb = new XSSFWorkbook(is);
+        }
+        Sheet sheet = wb.getSheetAt(0);
+        if (sheet != null) {
+        str = "文件上传成功";
+        } else {
+        str = "上传失败sheet为空";
+        return str;
+        }
+        for (int r = 1; r <= sheet.getLastRowNum(); r++) {
+        Row row = sheet.getRow(r);
+        if (row == null) {
+        continue;
+        }
+        row.getCell(0).setCellType(Cell.CELL_TYPE_STRING);
+        row.getCell(1).setCellType(Cell.CELL_TYPE_STRING);
+        row.getCell(2).setCellType(Cell.CELL_TYPE_STRING);
+        row.getCell(3).setCellType(Cell.CELL_TYPE_STRING);
+        row.getCell(4).setCellType(Cell.CELL_TYPE_STRING);
+        //从excel第二行开始获取每个单元格的数据
+
+        String stuname = row.getCell(0).getStringCellValue();
+        String stusex = row.getCell(1).getStringCellValue();
+        String stufamily = row.getCell(2).getStringCellValue();
+        String stuaddress = row.getCell(3).getStringCellValue();
+        String stunation = row.getCell(4).getStringCellValue();
+        Date stubrith = row.getCell(5).getDateCellValue();
+        StudentBase studentBase = new StudentBase();
+        studentBase.setStuname(stuname);
+        studentBase.setStusex(stusex);
+        studentBase.setStufamily(stufamily);
+        studentBase.setStuaddress(stuaddress);
+        studentBase.setStunation(stunation);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                studentBase.setStubrith(stubrith);
+                studentBaseMapper.insertSelective(studentBase);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+        return str;
+        }
+    }
+

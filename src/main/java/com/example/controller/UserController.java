@@ -268,5 +268,28 @@ public class UserController {
         map.put("data",map2);
         return map;
     }
+
+    //导入
+    @RequestMapping(value = "/import", method = {RequestMethod.POST})
+    @ResponseBody
+    public Object importExcl(@RequestParam(value="file",required=false) MultipartFile file, HttpServletRequest request, HttpServletResponse response,HttpSession session)  {
+        String str = "";
+        Map<String, String> resObj = new HashMap<>();
+        if (!file.isEmpty()) {
+            try {
+                    String filename = file.getOriginalFilename();
+                    str = dataService.importExcl(filename, file);
+            } catch (Exception e) {
+                    resObj.put("msg", "error");
+                    resObj.put("code", "1");
+                    return JSONObject.toJSONString(resObj);
+            }
+            resObj.put("msg", str);
+            resObj.put("code", "0");
+            return JSONObject.toJSONString(resObj);
+        } else {
+            return null;
+        }
+    }
 }
 

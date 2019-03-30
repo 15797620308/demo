@@ -1,4 +1,4 @@
-layui.use(['table','layer','form'],function(){
+layui.use(['table','layer','form','upload'],function(){
     var table=layui.table;
     var layer = layui.layer;
     var form = layui.form;
@@ -6,6 +6,7 @@ layui.use(['table','layer','form'],function(){
     var data;  //保存数据
     var jsondata;
     var $ = layui.jquery;
+    var upload = layui.upload;
     var postData={
         object:"studentBase",
         pageNumber:1,
@@ -13,6 +14,25 @@ layui.use(['table','layer','form'],function(){
         filterData:null
 
     };
+
+    //指定允许上传的文件类型
+    upload.render({
+        elem: '#importFile'
+        ,url: "/user/import"
+        ,accept: 'file' //普通文件
+        //,exts: 'xls' //只允许上传压缩文件
+        ,done: function(res){
+            if(res.code == 0){ //上传成功
+                layer.msg(res.msg);
+
+            }else{
+                layer.msg('上传失败');
+            }
+        }
+        ,error: function(index, upload){
+            layer.msg('上传失败');
+        }
+    });
 
     //发送ajax  列表查询ajax
     function send(postData){
