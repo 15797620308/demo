@@ -1,6 +1,7 @@
-layui.use('form', function(){
+layui.use(['form','layer'], function(){
     var form = layui.form(),
-        $ = layui.jquery;
+        $ = layui.jquery,
+        layer = parent.layer === undefined ? layui.layer : parent.layer;
     form.verify({
     username: function(value, item){ //value：表单的值、item：表单的DOM对象
         if(!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)){
@@ -44,8 +45,11 @@ layui.use('form', function(){
             data.field,
             function(data){
                 if(data=="false"){
-                    alert("您的编号不存在无法注册！");
-                    window.location.href = "/user/test/register";
+                    layer.msg("注册失败！",{
+                        icon: 5,
+                        time: 5000 //2秒关闭（如果不配置，默认是3秒）
+                    });
+                    //window.location.href = "/user/test/register";
                     return false;
                 }
                 alert("注册成功！");

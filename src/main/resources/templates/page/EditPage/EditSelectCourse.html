@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>选课信息管理</title>
     <link rel="stylesheet" href="/layui01/css/layui.css" media="all" />
+    <!--<link rel="stylesheet" href="/layui/css/layui.css" media="all" />-->
     <style type="text/css">
         .register{
             height:310px;
@@ -26,9 +27,15 @@
             </div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label">开始时间</label>
+            <div class="layui-input-block">
+                <input type="text"  name ="starttime" placeholder="请输入开始时间" lay-verify="required" id = "start"   class="layui-input test-item">
+            </div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">年级</label>
             <div class="layui-input-block">
-                <input type="text"  name ="selgrade" placeholder="请输入年级" lay-verify="required"  id = "grade" class="layui-input userBirthday">
+                <input type="text"  name ="selgrade" placeholder="请输入年级" lay-verify="required"  id = "grade" class="layui-input test-item">
             </div>
         </div>
         <div class="layui-form-item">
@@ -37,16 +44,11 @@
                 <input type="text" name="selnum" lay-verify="required|number" placeholder="请输入" autocomplete="off" class="layui-input">
             </div>
         </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">开始时间</label>
-            <div class="layui-input-block">
-                <input type="text"  name ="starttime" placeholder="请输入开始时间" lay-verify="required" id = "start" class="layui-input userBirthday">
-            </div>
-        </div>
+
         <div class="layui-form-item">
             <label class="layui-form-label">结束时间</label>
             <div class="layui-input-block">
-                <input type="text"  name ="endtime" placeholder="请输入结束时间" lay-verify="required" id = "end" class="layui-input userBirthday">
+                <input type="text"  name ="endtime" placeholder="请输入结束时间" lay-verify="required" id = "end"  class="layui-input test-item">
             </div>
         </div>
         <div class="layui-form-item">
@@ -61,6 +63,36 @@
 </div>
 <script src="/js/jquery-1.9.1.min.js" ></script>
 <script type="text/javascript" src="/layui01/layui.js"></script>
+<!--<script type="text/javascript" src="/layui/layui.js"></script>-->
 <script type="text/javascript" src="/js/register/EditSelectCourse.js"></script>
+<script type="text/javascript">
+    (function(){
+        useLayDateMultiple('start');
+        useLayDateMultiple('end');
+        layui.use('laydate', function() {
+            var laydate = layui.laydate;
+            lay('#grade').each(function() {
+                laydate.render({
+                    elem : this,
+                    trigger : 'click'
+                    ,type: 'year'
+                });
+            });
+        });
+    })()
+    //绑定日期控件(同时绑定多个)非常实用！
+    function useLayDateMultiple(cls) {
+        layui.use('laydate', function() {
+            var laydate = layui.laydate;
+            lay('#' + cls).each(function() {
+                laydate.render({
+                    elem : this,
+                    trigger : 'click'
+                    ,type: 'datetime'
+                });
+            });
+        });
+    }
+</script>
 </body>
 </html>

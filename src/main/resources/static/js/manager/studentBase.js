@@ -23,8 +23,8 @@ layui.use(['table','layer','form','upload'],function(){
         //,exts: 'xls' //只允许上传压缩文件
         ,done: function(res){
             if(res.code == 0){ //上传成功
-                layer.msg(res.msg);
-
+                alert(res.msg);
+                window.location.reload();
             }else{
                 layer.msg('上传失败');
             }

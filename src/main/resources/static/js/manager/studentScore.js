@@ -53,10 +53,11 @@ layui.use(['table','layer','form'],function(){
                 ,{field: 'stuname', title: '姓名', width:'10%',edit:'text',templet: '<div>{{d.studentBase.stuname}}</div>'}
                 ,{field: 'classname', title: '班级', width:'10%',templet: '<div>{{d.classInfo.classname}}</div>'}
                 ,{field: 'teachname', title: '老师', width:'10%',edit:'text',templet: '<div>{{d.teacherInfo.teachname}}</div>'}
+                ,{field: 'subject', title: '科目', width:'10%'}
                 ,{field: 'testtime', title: '考试时间', width:'15%'}
                 ,{field: 'stuscore', title: '分数', width:'10%'}
-                ,{field: 'ispass', title: '补考情况', width:'15%'}
-                ,{fixed: 'right',title: '操作', width:'20%', align:'center', toolbar: '#barDemo', hide : ishide}
+                ,{field: 'ispass', title: '补考情况', width:'10%'}
+                ,{fixed: 'right',title: '操作', width:'15%', align:'center', toolbar: '#barDemo', hide : ishide}
             ]],
             data: [],
             loading:true,
@@ -67,11 +68,14 @@ layui.use(['table','layer','form'],function(){
                 })
                 //LayUIDataTable.HideField('mk2');// 隐藏列-单列模式
                 // 对相关数据进行判断处理--此处对mk2大于30的进行高亮显示
-                $.each(currentRowDataList, function (index, obj) {
-                    if (obj['stuscore'] && obj['stuscore'].value < 60) {
-                        obj['stuscore'].row.css({"background-color": "#ffffff", 'color': '#FF3C1F'});
-                    }
-                })
+                if(currentRowDataList!=null&&currentRowDataList.length>0){
+                    $.each(currentRowDataList, function (index, obj) {
+                        if (obj['stuscore'] && obj['stuscore'].value < 60) {
+                            obj['stuscore'].row.css({"background-color": "#ffffff", 'color': '#FF3C1F'});
+                        }
+                    })
+                }
+
             }// end done
         };
     // -------------------------页面初始化--------------------------------

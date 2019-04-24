@@ -216,7 +216,7 @@ layui.use(['table','layer','form'],function(){
         } else//删除数据
         {
             layer.confirm('真的删除行么', function(index){
-                $.post("/user/deldata",{id:data.stuid,object:"courseInfo" },
+                $.post("/user/deldata",{id:data.courseid,object:"courseInfo"},
                 function(msg){
                     if(msg.code==1){
                         //obj.del();//删除对应行（tr）的DOM结构，并更新缓存

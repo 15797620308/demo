@@ -49,7 +49,8 @@ layui.use(['table','layer','form'],function(){
             //limit: 1,//每页默认显示的数量
             cols: [[
                 //{field: 'id', title: 'ID',width:20, fixed: 'left'}
-                {field: 'teachid', title: 'ID', type:'checkbox', width:'10%', sort: true, fixed: 'left'}
+                { type:'checkbox', width:'5%', fixed: 'left'}
+                ,{field: 'teachid', title: '编号', width:'10%', sort: true, fixed: 'left'}
                 ,{field: 'teachname', title: '姓名', width:'10%',edit:'text'}
                 ,{field: 'teachsex', title: '性别', width:'10%'}
                 ,{field: 'teachage', title: '年龄', width:'10%',edit:'text'}
@@ -57,7 +58,7 @@ layui.use(['table','layer','form'],function(){
                 ,{field: 'iswork', title: '在职情况', width:'10%'}
                 ,{field: 'phone', title: '联系方式', width:'10%'}
                 ,{field: 'position', title: '职务', width:'10%'}
-                ,{fixed: 'right',title: '操作', width:'20%', align:'center', toolbar: '#barDemo', hide : ishide}
+                ,{fixed: 'right',title: '操作', width:'15%', align:'center', toolbar: '#barDemo', hide : ishide}
             ]],
             data: [],
             loading:true

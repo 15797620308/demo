@@ -49,14 +49,15 @@ layui.use(['table','layer','form'],function(){
             //limit: 1,//每页默认显示的数量
             cols: [[
                 //{field: 'id', title: 'ID',width:20, fixed: 'left'}
-                {field: 'manid', title: 'ID', type:'checkbox', width:'10%', sort: true, fixed: 'left'}
+                { type:'checkbox', width:'5%', fixed: 'left'}
+                ,{field: 'manid', title: '编号', width:'10%', sort: true, fixed: 'left'}
                 ,{field: 'manname', title: '姓名', width:'10%',edit:'text'}
                 ,{field: 'mansex', title: '性别', width:'10%'}
                 ,{field: 'manage', title: '年龄', width:'10%',edit:'text'}
                 ,{field: 'mantry', title: '入职时间', width:'15%'}
                 ,{field: 'iswork', title: '在职情况', width:'10%'}
                 ,{field: 'phone', title: '联系方式', width:'15%'}
-                ,{fixed: 'right',title: '操作', width:'20%', align:'center', toolbar: '#barDemo', hide : ishide}
+                ,{fixed: 'right',title: '操作', width:'15%', align:'center', toolbar: '#barDemo', hide : ishide}
             ]],
             data: [],
             loading:true

@@ -109,9 +109,14 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/changePwd",produces = {"application/json;charset=UTF-8"})
     public String changePwd(HttpSession session,AccountInfo accountInfo){
-        loginService.changePwd(accountInfo);
-        loginService.exit(session);
-        return "login" ;
+        int result = loginService.changePwd(accountInfo);
+        String resut2 = "false";
+        if(result==1){
+            loginService.exit(session);
+            resut2 = "true";
+        }
+
+        return resut2 ;
     }
 
     //测试

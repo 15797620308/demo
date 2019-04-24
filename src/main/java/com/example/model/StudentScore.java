@@ -24,6 +24,8 @@ public class StudentScore {
 
     private TeacherInfo teacherInfo;
 
+    private String subject;
+
     public Short getScoreid() {
         return scoreid;
     }
@@ -32,7 +34,13 @@ public class StudentScore {
         this.scoreid = scoreid;
     }
 
+    public String getSubject() {
+        return subject;
+    }
 
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
 
     public Double getStuscore() {
         return stuscore;

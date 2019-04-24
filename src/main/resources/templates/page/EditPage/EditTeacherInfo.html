@@ -52,8 +52,8 @@
         <div class="layui-form-item" >
             <label class="layui-form-label" style="text-align: center;">性别</label>
             <div class="layui-input-block userSex">
-                <input type="radio" name="mansex" value="男" title="男" id="man">
-                <input type="radio" name="mansex" value="女" title="女" id="women">
+                <input type="radio" name="teachsex" value="男" title="男" id="man">
+                <input type="radio" name="teachsex" value="女" title="女" id="women">
             </div>
         </div>
         <div class="layui-form-item" pane="">
@@ -72,22 +72,17 @@
 <script type="text/javascript" src="/js/register/EditTeacherInfo.js"></script>
 <script type="text/javascript" >
     function setData(data){
-        var manid =  $("input[name='manid']");
-        var manname =  $("input[name='manname']");
-        var manage =  $("input[name='manage']");
-        var mantry =  $("input[name='mantry']");
-        var phone =  $("input[name='phone']");
-        var postWay = $("#postWay");
-        manid.val(data.manid);
-        manname.val(data.manname);
-        manage.val(data.manage);
-        mantry.val(data.mantry);
-        phone.val(data.phone);
-        postWay.val("edit");
+        $("input[name='teachid']").val(data.teachid);
+        $("input[name='teachname']").val(data.teachname);
+        $("input[name='teachage']").val(data.teachage);
+        $("input[name='mantry']").val(data.mantry);
+        $("input[name='position']").val(data.position);
+        $("input[name='phone']").val(data.phone);
+        $("#postWay").val("edit");
         layui.use('form', function () {
             var $ = layui.jquery;//重点在layui中引用JQ必须写这一句
             var form = layui.form();
-            $(".userSex input[value="+data.mansex+"]").attr("checked","checked"); //性别
+            $(".userSex input[value="+data.teachsex+"]").attr("checked","checked"); //性别
             $(".work input[value="+data.iswork+"]").attr("checked","checked"); //性别
             form.render();
         });

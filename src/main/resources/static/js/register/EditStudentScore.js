@@ -15,7 +15,8 @@ layui.use(['form','layer','laydate'], function(){
             //console.log(JSON.stringify(data));
             var studentBaseList = data.studentBaseList,
                 classInfoList = data.classInfoList,
-                teacherInfoList = data.teacherInfoList;
+                teacherInfoList = data.teacherInfoList,
+                courseInfoList = data.courseInfoList;
             var $html = "";
             $.each(studentBaseList, function (index, item) {
                 $html += "<option  value='" + item.stuid + "'>" + item.stuname + "</option>";
@@ -31,6 +32,11 @@ layui.use(['form','layer','laydate'], function(){
                 $html += "<option  value='" + item.teachid + "'>" + item.teachname + "</option>";
             });
             $("select[name='teacherInfo.teachid']").append($html);
+            $html = "";
+            $.each(courseInfoList, function (index, item) {
+                $html += "<option  value='" + item.coursename + "'>" + item.coursename + "</option>";
+            });
+            $("select[name='subject']").append($html);
             //append后必须从新渲染
             form.render('select');
         },

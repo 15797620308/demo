@@ -42,6 +42,14 @@
             </div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label" style="text-align: center;">科目</label>
+            <div class="layui-input-block">
+                <select name="subject" lay-verify="required">
+                    <option value="" >请选择科目</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">考试时间</label>
             <div class="layui-input-block">
                 <input type="text"  name ="testtime" placeholder="请输入入校时间" lay-verify="required|date" onclick="layui.laydate({elem: this,max: laydate.now()})" class="layui-input userBirthday">
@@ -76,6 +84,7 @@
                 $("select[name='studentBase.stuid']").val(data.studentBase.stuid);
                 $("select[name='classInfo.classid']").val(data.classInfo.classid);
                 $("select[name='teacherInfo.teachid']").val(data.teacherInfo.teachid);
+                $("select[name='subject']").val(data.subject);
                 //$('#role').attr('disabled',"disabled");
                 form.render('select');
             },500);

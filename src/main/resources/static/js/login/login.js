@@ -17,6 +17,7 @@ layui.config({
 	form.on("submit(login)",function(data){
         var index = layer.msg('提交中，请稍候',{icon: 16,time:false,shade:0.8});
 		var msg = $("#msg").html();
+
 		if(""==msg){
             layer.msg("验证码不通过！",{
                 icon: 2,
@@ -31,10 +32,7 @@ layui.config({
             function(data){
                 layer.close(index);
                 if(data=="false"){
-                    layer.msg("账号或密码错误！",{
-                        icon: 2,
-                        time: 5000 //2秒关闭（如果不配置，默认是3秒）
-                    });
+                    alert("账号或密码错误！");
                     window.location.href = "/user/test/login";
                 	return;
 				}

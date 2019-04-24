@@ -100,7 +100,7 @@ public class DataService {
                 tabledatas = courseInfoMapper.selectAll(filterData);
                 countNum = courseInfoMapper.selectCount(filterData);
                 break;
-            case "seleteCourse":
+            case "selectCourse":
                 AccountInfo accountInfo = (AccountInfo) session.getAttribute("user");
                 String role = accountInfo.getUserrole();
                 if("学生".equals(role)){
@@ -220,7 +220,7 @@ public class DataService {
                     CourseInfoMapper courseInfoMapper1= batchSqlSeeeion.getMapper(CourseInfoMapper.class);
                     result = courseInfoMapper1.batchDelete(arr);
                     break;
-                case "seleteCourse":
+                case "selectCourse":
                     SelectCourseMapper selectCourseMapper1= batchSqlSeeeion.getMapper(SelectCourseMapper.class);
                     result = selectCourseMapper1.batchDelete(arr);
                     break;
@@ -419,10 +419,12 @@ public class DataService {
        List<StudentBase> studentBaseList= studentBaseMapper.selectAll(null);
        List<ClassInfo> classInfoList =  classInfoMapper.selectAll(null);
        List<TeacherInfo> teacherInfoList =  teacherInfoMapper.selectAll(null);
+        List<CourseInfo> courseInfoList =  courseInfoMapper.selectAll(null);
         Map map = new HashMap();
         map.put("studentBaseList",studentBaseList);
         map.put("classInfoList",classInfoList);
         map.put("teacherInfoList",teacherInfoList);
+        map.put("courseInfoList",courseInfoList);
         return map;
     }
 

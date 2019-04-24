@@ -46,18 +46,12 @@ layui.use(['form','layer'], function(){
             data.field,
             function(data){
                 if(data=="false"){
-                    layer.msg("输入的编号不存在无法注册！",{
-                        icon: 2,
-                        time: 5000 //2秒关闭（如果不配置，默认是3秒）
-                    });
+                    alert("输入的编号不存在无法注册！");
                     return false;
                 }
                 var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
                 parent.layer.close(index); //再执行关闭
-                layer.msg("操作成功！",{
-                    icon: 2,
-                    time: 5000 //2秒关闭（如果不配置，默认是3秒）
-                });
+                alert("操作成功！");
                 window.parent.location.reload();
             },
             "text"

@@ -7,7 +7,7 @@ layui.use(['table','layer','form'],function(){
     var jsondata;
     var $ = layui.jquery;
     var postData={
-        object:"seleteCourse",
+        object:"selectCourse",
         pageNumber:1,
         pageSize:1,
         filterData:null
@@ -167,28 +167,29 @@ layui.use(['table','layer','form'],function(){
         },
         select:function(){
             var checkStatus=table.checkStatus('test'),
-                data=checkStatus.data,
-                id = data[0].selid;
+                data=checkStatus.data;
+            if(data!=null&&data.length>0){
+                var id = data[0].selid;
                 console.log("id:"+id);
-            if(id!=''){
                 layer.confirm('确定选择这个课程吗？',function (index) {
                     $.ajax({
                         url: '/user/select',
                         type:'post',
-                        dataType:'json',
+                        dataType:'text',
                         data:{id:id},
                         success:function (data) {
-                            if(data.result=='1'){
+                            console.log("data:"+data);
+                            if(data=='1'){
                                 layer.msg('选择成功',{
                                     icon: 6,
                                     time: 5000 //2秒关闭（如果不配置，默认是3秒）
                                 });
-                            }else if(data.result=='2'){
+                            }else if(data=='2'){
                                 layer.msg('你已经选择过！',{
                                     icon: 5,
                                     time: 5000 //2秒关闭（如果不配置，默认是3秒）
                                 });
-                            }else if(data.result=='3'){
+                            }else if(data=='3'){
                                 layer.msg('该课程已经被选完！',{
                                     icon: 5,
                                     time: 5000 //2秒关闭（如果不配置，默认是3秒）
@@ -270,7 +271,7 @@ layui.use(['table','layer','form'],function(){
         } else//删除数据
         {
             layer.confirm('真的删除行么', function(index){
-                $.post("/user/deldata",{id:data.selid,object:"seleteCourse" },
+                $.post("/user/deldata",{id:data.selid,object:"selectCourse"},
                 function(msg){
                     if(msg.code==1){
                         //obj.del();//删除对应行（tr）的DOM结构，并更新缓存

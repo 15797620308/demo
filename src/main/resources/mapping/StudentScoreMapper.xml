@@ -6,12 +6,13 @@
     <result column="stuScore" property="stuscore" jdbcType="DOUBLE" />
     <result column="testTime" property="testtime" jdbcType="DATE" />
     <result column="isPass" property="ispass" jdbcType="VARCHAR" />
+    <result column="subject" property="subject" jdbcType="VARCHAR" />
     <association property="studentBase" column="stuId" select="getStudentBase"/>
     <association property="classInfo" column="classId" select="getClassInfo"/>
     <association property="teacherInfo" column="teacherId" select="getTeacher"/>
   </resultMap>
   <sql id="Base_Column_List" >
-    scoreId, stuId, classId, stuScore, testTime, isPass, teacherId
+    scoreId, stuId, classId, stuScore, testTime, isPass, teacherId, subject
   </sql>
 
   <select id="getStudentBase" resultType="com.example.model.StudentBase" parameterType="java.lang.Short">
@@ -78,10 +79,10 @@
   <insert id="insert" parameterType="com.example.model.StudentScore" >
     insert into stu_score (scoreId, stuId, classId, 
       stuScore, testTime, isPass, 
-      teacherId)
+      teacherId,subject)
     values (#{scoreid,jdbcType=SMALLINT}, #{studentBase.stuid,jdbcType=SMALLINT}, #{classInfo.classid,jdbcType=SMALLINT},
       #{stuscore,jdbcType=DOUBLE}, #{testtime,jdbcType=DATE}, #{ispass,jdbcType=VARCHAR}, 
-      #{teacherInfo.teachid,jdbcType=SMALLINT})
+      #{teacherInfo.teachid,jdbcType=SMALLINT}, #{subject,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.model.StudentScore" >
     insert into stu_score
@@ -107,6 +108,9 @@
       <if test="teacherInfo.teachid != null" >
         teacherId,
       </if>
+      <if test="subject != null" >
+        subject
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="scoreid != null" >
@@ -129,6 +133,9 @@
       </if>
       <if test="teacherInfo.teachid != null" >
         #{teacherInfo.teachid,jdbcType=SMALLINT},
+      </if>
+      <if test="subject != null" >
+        #{subject,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -153,6 +160,9 @@
       <if test="teacherInfo.teachid != null" >
         teacherId = #{teacherInfo.teachid,jdbcType=SMALLINT},
       </if>
+      <if test="subject != null" >
+        subject = #{subject,jdbcType=VARCHAR},
+      </if>
     </set>
     where scoreId = #{scoreid,jdbcType=SMALLINT}
   </update>
@@ -163,7 +173,8 @@
       stuScore = #{stuscore,jdbcType=DOUBLE},
       testTime = #{testtime,jdbcType=DATE},
       isPass = #{ispass,jdbcType=VARCHAR},
-      teacherId = #{teacherInfo.teachid,jdbcType=SMALLINT}
+      teacherId = #{teacherInfo.teachid,jdbcType=SMALLINT},
+      subject = #{subject,jdbcType=VARCHAR}
     where scoreId = #{scoreid,jdbcType=SMALLINT}
   </update>
 </mapper>

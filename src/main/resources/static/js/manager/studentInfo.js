@@ -50,13 +50,14 @@ layui.use(['table','layer','form'],function(){
             cols: [[
                 //{field: 'id', title: 'ID',width:20, fixed: 'left'}
                 {field: 'stuid', title: 'ID', type:'checkbox', width:'10%', sort: true, fixed: 'left'}
+                ,{field: 'stuid', title: '编号',  width:'10%', sort: true, fixed: 'left'}
                 ,{field: 'stuname', title: '姓名', width:'10%',edit:'text',templet: '<div>{{d.studentBase.stuname}}</div>'}
                 ,{field: 'classname', title: '班级', width:'10%',templet: '<div>{{d.classInfo.classname}}</div>'}
                 ,{field: 'teachname', title: '班导', width:'10%',edit:'text',templet: '<div>{{d.teacherInfo.teachname}}</div>'}
-                ,{field: 'stustart', title: '入校时间', width:'15%'}
+                ,{field: 'stustart', title: '入校时间', width:'10%'}
                 ,{field: 'stumajor', title: '专业', width:'10%'}
                 ,{field: 'phone', title: '联系方式', width:'15%'}
-                ,{fixed: 'right',title: '操作', width:'20%', align:'center', toolbar: '#barDemo', hide : ishide}
+                ,{fixed: 'right',title: '操作', width:'15%', align:'center', toolbar: '#barDemo', hide : ishide}
             ]],
             data: [],
             loading:true

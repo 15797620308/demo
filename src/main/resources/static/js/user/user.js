@@ -154,13 +154,15 @@ layui.config({
         $.post(
             url,
             data.field,
-            function(data,str){
+            function(data){
                 layer.close(index);
-                layer.msg("密码修改成功！",{
-                    icon: 1,
-                    time: 5000 //2秒关闭（如果不配置，默认是3秒）
-                });
-                parent.location.href= "/user/test/login";
+                if(data=="true"){
+                    alert("密码修改成功！");
+                    parent.location.href= "/user/test/login";
+                    return;
+                }
+                alert("修改失败！");
+
             },
             "text"
         );
