@@ -1,27 +1,32 @@
 package com.example.service;
 
-import com.alibaba.fastjson.JSON;
-import com.example.mapper.StudentInfoMapper;
-import com.example.model.Navs;
-import com.example.model.StudentInfo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
 
-@Component
 public class test {
-        @Autowired
-        StudentInfoMapper studentInfoMapper;
+    //手动发送消息到MQ
     public static void main(String[] args){
-        StudentInfoMapper studentInfoMapper = null;
-        StudentInfo studentInfo = studentInfoMapper.selectByPrimaryKey((short) 1);
-        String stuname = studentInfo.getStudentBase().getStuname();
-        String className = studentInfo.getClassInfo().getClassname();
-        String teachername = studentInfo.getTeacherInfo().getTeachname();
-        System.out.println(stuname);
-        System.out.println(className);
-        System.out.println(teachername);
+        ConnectionFactory connectionFactory = new ConnectionFactory();
+        connectionFactory.setUsername("guest");
+        connectionFactory.setPassword("guest");
+        connectionFactory.setHost("127.0.0.1");
+        connectionFactory.setPort(5672);
+        //connectionFactory.setVirtualHost("/");
+        //connectionFactory.setPublisherConfirms(true);
+        try {
+            Connection connection =  connectionFactory.newConnection();
+            Channel channel = connection.createChannel();
+            //channel.exchangeDeclare("dxx.direct","direct");
+            channel.basicPublish("dxx.direct","test1",null,new String("第一次发送").getBytes());
+            System.out.println(" [x] Sent '"+ "'");
+            channel.close();
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+
+        }
     }
 }
